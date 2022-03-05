@@ -1,0 +1,689 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: PBSeasy Reseller API
+  description: This is the PBSeasy Reseller API
+  contact:
+    name: API Support
+    email: t.mousilarikos@pbsnetwork.eu
+servers:
+- url: https://reseller.cntr.pbsnetwork.eu/reseller/api/v3
+  description: Production server
+tags:
+- name: Endpoints for GKK
+paths:
+  /partners:
+    get:
+      tags:
+      - Endpoints for GKK
+      security:
+      - openId:
+        - user
+      summary: Retrieve all partners (suppliers)
+      description: Returns a  *paginated* list of all parterns/suppliers.
+      operationId: getPartners
+      parameters:
+      - name: _limit
+        in: query
+        description: Number of items to return at one time
+        required: false
+        schema:
+          type: integer
+          format: int32
+        example: 24
+      - name: _start
+        in: query
+        description: Which item to start displaying
+        required: false
+        schema:
+          type: integer
+          format: int32
+        example: 2
+      - name: _sort
+        in: query
+        description: >-
+          To sort after which parameter. Possible values are supplierGLN,
+          supplierName and status.
+        required: false
+        schema:
+          type: string
+          enum:
+          - supplierGLN
+          - supplierName
+          - status
+        example: status
+      - name: status
+        in: query
+        description: Status of suppliers. , REQUESTED.
+        required: false
+        schema:
+          type: string
+          enum:
+          - GRANTED
+          - DENIED
+          - REQUESTED
+        example: GRANTED
+      responses:
+        '200':
+          description: A paged array of suppliers and paging information
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Supplier'
+                  paging:
+                    $ref: '#/components/schemas/Paging'
+
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /catalogs/{supplierGLN}/items:
+    get:
+      tags:
+      - Endpoints for GKK
+      security:
+      - openId:
+        - user
+      summary: Retrieve all items by a supplier
+      description: Returns a *paginated* list of items/products offered by a supplier.
+      operationId: getItems
+      parameters:
+      - name: supplierGLN
+        in: path
+        description: >-
+          The global location number (GLN) of a supplier. This number can be
+          retrieved from the endpoint **/partners**.
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: _lang
+        in: query
+        description: >-
+          The language ISO (de, en, fr) determines in which language the
+          content should be delivered. **Choose de for GKK**
+        required: false
+        schema:
+          type: string
+          enum:
+          - de
+          - en
+          - fr
+        example: de
+      - name: _limit
+        in: query
+        description: Number of items to return at one time
+        required: false
+        schema:
+          type: integer
+          format: int32
+        example: 24
+      - name: _start
+        in: query
+        description: Which item to start displaying
+        required: false
+        schema:
+          type: integer
+          format: int32
+        example: 2
+      responses:
+        '200':
+          description: A paged array of items and pagination information
+          content:
+            application/json:
+              schema:
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ItemShort'
+                  paging:
+                    $ref: '#/components/schemas/Paging'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+  /catalogs/{supplierGLN}/items/{GTIN}:
+    get:
+      tags:
+      - Endpoints for GKK
+      security:
+      - openId:
+        - user
+      summary: Retrieve an item by a supplier
+      description: Returns the details of an item offered by a supplier.
+      operationId: getGTINs
+      parameters:
+      - name: supplierGLN
+        in: path
+        description: >-
+          The global location number (GLN) of a supplier. This number can be
+          retrieved from the endpoint **/partners**.
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: GTIN
+        in: path
+        description: The global trade item number (GTIN)
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: _lang
+        in: query
+        description: >-
+          The language ISO (de, en, fr) determines in which language the
+          content should be delivered. **Choose de for GKK**
+        required: false
+        schema:
+          type: string
+          enum:
+          - de
+          - en
+          - fr
+        example: de
+      - name: _limit
+        in: query
+        description: Number of items to return at one time
+        required: false
+        schema:
+          type: integer
+          format: int32
+        example: 24
+      - name: _start
+        in: query
+        description: Which item to start displaying
+        required: false
+        schema:
+          type: integer
+          format: int32
+        example: 2
+      responses:
+        '200':
+          description: An item
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Item'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+components:
+  securitySchemes:
+    openId:
+      type: openIdConnect
+      openIdConnectUrl: https://auth.pbsnetwork.eu/auth/realms/pbs/protocol/openid-connect/token
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            TypeException:
+              value:
+                timestamp: 2022-02-27T21:22:40.362+0000
+                status: 400
+                error: Bad Request
+                message: "Failed to convert value of type 'java.lang.String' to required type 'java.lang.Integer'; nested exception is java.lang.NumberFormatException: For input string: \"hklfdf\""
+                path: /reseller/api/v3/partners
+    Unauthorized:
+      description: Unauthorized
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            timestamp: 2022-02-27T21:35:25.849+0000
+            status: 401
+            error: Unauthorized
+            message: 'JWT expired at 2022-02-27T21:27:00Z. Current time: 2022-02-27T21:35:25Z, a difference of 505843 milliseconds.  Allowed clock skew: 0 milliseconds.'
+            path: /reseller/api/v3/partners
+  schemas:
+    Supplier:
+      type: object
+      required:
+      - supplierGLN
+      - supplierName
+      - created
+      - status
+      properties:
+        supplierGLN:
+          type: integer
+          format: int46
+          example: 7611468000001
+        supplierName:
+          type: string
+          example: Simplex AG Bern
+        created:
+          type: string
+          format: date-time
+          example: '2021-11-09T15:06:52.976Z'
+        status:
+          type: string
+          format: enum[GRANTED, DENIED, REQUESTED]
+          example: GRANTED
+    Paging:
+      type: object
+      required:
+      - total
+      - start
+      - limit
+      properties:
+        total:
+          type: integer
+          format: int46
+          example: 35
+        start:
+          type: integer
+          format: int46
+          example: 12
+        limit:
+          type: integer
+          format: int46
+          example: 20
+    Items:
+      type: array
+      items:
+        $ref: '#/components/schemas/ItemShort'
+    ItemShort:
+      type: object
+      required:
+      - gtin
+      - productCode
+      - text
+      - modified
+      - status
+      properties:
+        gtin:
+          type: string
+          example: 4004764983483
+        productCode:
+          type: string
+          example: 18-5027
+        text:
+          type: string
+          example: EDD-5027 Kyocera TK-560Y - Gelb - 10000 Seiten
+        modified:
+          type: string
+          format: date-time
+          example: '2022-02-23T12:10:13Z'
+        status:
+          type: object
+          required:
+          - deliverable
+          - lifeCycle
+          properties:
+            deliverable:
+              type: boolean
+              example: true
+            lifeCycle:
+              type: string
+              example: ACT
+    Item:
+      type: object
+      required:
+      - uuid
+      - modified
+      - cataologGLN
+      - vendorGLN
+      - mode
+      - gtin
+      - productCodeVendor
+      - masterProdcutGTIN
+      - title
+      - description
+      - descriptionSeperated
+      - descriptionShort
+      - catalogText
+      - headline
+      - brandname
+      - manufacturer
+      - functionDescription
+      - kindText
+      - deliverable
+      - flags
+      - packagingHierachies
+      - logistics
+      - weightsAndMeasurables
+      - prices
+      - classifications
+      properties:
+        uuid:
+          type: string
+          format: uuid
+          example: 56942b2199328b1d541f5b19
+        modified:
+          type: string
+          example: '2022-02-23T12:09:27.853Z'
+        catalogGLN:
+          type: string
+          example: 4004764000005
+        vendorGLN:
+          type: string
+          example: 4004764000005
+        mode:
+          type: string
+          example: update
+        gtin:
+          type: string
+          example: 4043023602543
+        productCodeVendor:
+          type: string
+          example: 18-254
+        masterProductGTIN:
+          type: string
+          example: Ink cartridge
+        title:
+          type: string
+          example: EDD-254 HP 351XL (CB338EE) - 3-Color - 22 ml
+        description:
+          type: string
+          example: 'Wiederaufbereitete Druckerpatrone ersetzt HP 351XL (CB338EE). Druckfarbe: 3-Farbig. Inhalt: 22 ml. Druckerpatrone kompatibel für: HP DeskJet D 4200 Series, DeskJet D 4260, DeskJet D 4300 Series, DeskJet D 4360, DeskJet D 4368, OfficeJet J 5725, OfficeJet J 5730, OfficeJet J 5735, OfficeJet J 5740, OfficeJet J 5742, OfficeJet J 5750, OfficeJet J 5780, OfficeJet J 5783, OfficeJet J 5785, OfficeJet J 6400 Series, OfficeJet J 6405, OfficeJet J 6410, OfficeJet J 6413, OfficeJet J 6415, OfficeJet J 6424, OfficeJet J 6450, OfficeJet J 6480, OfficeJet J 6488, Photosmart C 4200 Series, Photosmart C 4225, Photosmart C 4270, Photosmart C 4280, Photosmart C 4283, Photosmart C 4300 Series, Photosmart C 4324, Photosmart C 4340, Photosmart C 4345, Photosmart C 4380, Photosmart C 4384, Photosmart C 4385, Photosmart C 4390, Photosmart C 4400 Series, Photosmart C 4410, Photosmart C 4424, Photosmart C 4435, Photosmart C 4440, Photosmart C 4450, Photosmart C 4470, Photosmart C 4475, Photosmart C 4480, Photosmart C 4485, Photosmart C 4486, Photosmart C 4488, Photosmart C 4500 Series, Photosmart C 4524, Photosmart C 4540, Photosmart C 4550, Photosmart C 4570, Photosmart C 4572, Photosmart C 4575, Photosmart C 4580, Photosmart C 4583, Photosmart C 4585, Photosmart C 4588, Photosmart C 4599, Photosmart C 5200 Series, Photosmart C 5240, Photosmart C 5250, Photosmart C 5270, Photosmart C 5275, Photosmart C 5280, Photosmart C 5283, Photosmart C 5290, Photosmart C 5580, Photosmart D 5300 Series, Photosmart D 5345, Photosmart D 5355, Photosmart D 5360, Photosmart D 5368. Yield according to: ISO/IEC 24711. Inkjet cartridge compatible for: HP DeskJet D 4200 Series, DeskJet D 4260, DeskJet D 4300 Series, DeskJet D 4360, DeskJet D 4368, OfficeJet J 5725, OfficeJet J 5730, OfficeJet J 5735, OfficeJet J 5740, OfficeJet J 5742, OfficeJet J 5750, OfficeJet J 5780, OfficeJet J 5783, OfficeJet J 5785, OfficeJet J 6400 Series, OfficeJet J 6405, OfficeJet J 6410, OfficeJet J 6413, OfficeJet J 6415, OfficeJet J 6424, OfficeJet J 6450, OfficeJet J 6480, OfficeJet J 6488, Photosmart C 4200 Series, Photosmart C 4225, Photosmart C 4270, Photosmart C 4280, Photosmart C 4283, Photosmart C 4300 Series, Photosmart C 4324, Photosmart C 4340, Photosmart C 4345, Photosmart C 4380, Photosmart C 4384, Photosmart C 4385, Photosmart C 4390, Photosmart C 4400 Series, Photosmart C 4410, Photosmart C 4424, Photosmart C 4435, Photosmart C 4440, Photosmart C 4450, Photosmart C 4470, Photosmart C 4475, Photosmart C 4480, Photosmart C 4485, Photosmart C 4486, Photosmart C 4488, Photosmart C 4500 Series, Photosmart C 4524, Photosmart C 4540, Photosmart C 4550, Photosmart C 4570, Photosmart C 4572, Photosmart C 4575, Photosmart C 4580, Photosmart C 4583, Photosmart C 4585, Photosmart C 4588, Photosmart C 4599, Photosmart C 5200 Series, Photosmart C 5240, Photosmart C 5250, Photosmart C 5270, Photosmart C 5275, Photosmart C 5280, Photosmart C 5283, Photosmart C 5290, Photosmart C 5580, Photosmart D 5300 Series, Photosmart D 5345, Photosmart D 5355, Photosmart D 5360, Photosmart D 5368.'
+        descriptionSeperated:
+          type: string
+          example: 'Wiederaufbereitete Druckerpatrone ersetzt HP 351XL (CB338EE) · Druckfarbe: 3-Farbig · Inhalt: 22 ml · Druckerpatrone kompatibel für: HP DeskJet D 4200 Series, DeskJet D 4260, DeskJet D 4300 Series, DeskJet D 4360, DeskJet D 4368, OfficeJet J 5725, OfficeJet J 5730, OfficeJet J 5735, OfficeJet J 5740, OfficeJet J 5742, OfficeJet J 5750, OfficeJet J 5780, OfficeJet J 5783, OfficeJet J 5785, OfficeJet J 6400 Series, OfficeJet J 6405, OfficeJet J 6410, OfficeJet J 6413, OfficeJet J 6415, OfficeJet J 6424, OfficeJet J 6450, OfficeJet J 6480, OfficeJet J 6488, Photosmart C 4200 Series, Photosmart C 4225, Photosmart C 4270, Photosmart C 4280, Photosmart C 4283, Photosmart C 4300 Series, Photosmart C 4324, Photosmart C 4340, Photosmart C 4345, Photosmart C 4380, Photosmart C 4384, Photosmart C 4385, Photosmart C 4390, Photosmart C 4400 Series, Photosmart C 4410, Photosmart C 4424, Photosmart C 4435, Photosmart C 4440, Photosmart C 4450, Photosmart C 4470, Photosmart C 4475, Photosmart C 4480, Photosmart C 4485, Photosmart C 4486, Photosmart C 4488, Photosmart C 4500 Series, Photosmart C 4524, Photosmart C 4540, Photosmart C 4550, Photosmart C 4570, Photosmart C 4572, Photosmart C 4575, Photosmart C 4580, Photosmart C 4583, Photosmart C 4585, Photosmart C 4588, Photosmart C 4599, Photosmart C 5200 Series, Photosmart C 5240, Photosmart C 5250, Photosmart C 5270, Photosmart C 5275, Photosmart C 5280, Photosmart C 5283, Photosmart C 5290, Photosmart C 5580, Photosmart D 5300 Series, Photosmart D 5345, Photosmart D 5355, Photosmart D 5360, Photosmart D 5368 · Yield according to: ISO/IEC 24711 · Inkjet cartridge compatible for: HP DeskJet D 4200 Series, DeskJet D 4260, DeskJet D 4300 Series, DeskJet D 4360, DeskJet D 4368, OfficeJet J 5725, OfficeJet J 5730, OfficeJet J 5735, OfficeJet J 5740, OfficeJet J 5742, OfficeJet J 5750, OfficeJet J 5780, OfficeJet J 5783, OfficeJet J 5785, OfficeJet J 6400 Series, OfficeJet J 6405, OfficeJet J 6410, OfficeJet J 6413, OfficeJet J 6415, OfficeJet J 6424, OfficeJet J 6450, OfficeJet J 6480, OfficeJet J 6488, Photosmart C 4200 Series, Photosmart C 4225, Photosmart C 4270, Photosmart C 4280, Photosmart C 4283, Photosmart C 4300 Series, Photosmart C 4324, Photosmart C 4340, Photosmart C 4345, Photosmart C 4380, Photosmart C 4384, Photosmart C 4385, Photosmart C 4390, Photosmart C 4400 Series, Photosmart C 4410, Photosmart C 4424, Photosmart C 4435, Photosmart C 4440, Photosmart C 4450, Photosmart C 4470, Photosmart C 4475, Photosmart C 4480, Photosmart C 4485, Photosmart C 4486, Photosmart C 4488, Photosmart C 4500 Series, Photosmart C 4524, Photosmart C 4540, Photosmart C 4550, Photosmart C 4570, Photosmart C 4572, Photosmart C 4575, Photosmart C 4580, Photosmart C 4583, Photosmart C 4585, Photosmart C 4588, Photosmart C 4599, Photosmart C 5200 Series, Photosmart C 5240, Photosmart C 5250, Photosmart C 5270, Photosmart C 5275, Photosmart C 5280, Photosmart C 5283, Photosmart C 5290, Photosmart C 5580, Photosmart D 5300 Series, Photosmart D 5345, Photosmart D 5355, Photosmart D 5360, Photosmart D 5368'
+        descriptionShort:
+          type: string
+          example: EDD-254 HP 351XL (CB338EE) - 3-Farbig - 22 ml
+        catalogText:
+          type: string
+          example: 'Wiederaufbereitete Druckerpatrone ersetzt HP 351XL (CB338EE). Druckfarbe: 3-Farbig. Inhalt: 22 ml. Druckerpatrone kompatibel für: HP DeskJet D 4200 Series, DeskJet D 4260, DeskJet D 4300 Series, DeskJet D 4360, DeskJet D 4368, OfficeJet J 5725, OfficeJet J 5730, OfficeJet J 5735, OfficeJet J 5740, OfficeJet J 5742, OfficeJet J 5750, OfficeJet J 5780, OfficeJet J 5783, OfficeJet J 5785, OfficeJet J 6400 Series, OfficeJet J 6405, OfficeJet J 6410, OfficeJet J 6413, OfficeJet J 6415, OfficeJet J 6424, OfficeJet J 6450, OfficeJet J 6480, OfficeJet J 6488, Photosmart C 4200 Series, Photosmart C 4225, Photosmart C 4270, Photosmart C 4280, Photosmart C 4283, Photosmart C 4300 Series, Photosmart C 4324, Photosmart C 4340, Photosmart C 4345, Photosmart C 4380, Photosmart C 4384, Photosmart C 4385, Photosmart C 4390, Photosmart C 4400 Series, Photosmart C 4410, Photosmart C 4424, Photosmart C 4435, Photosmart C 4440, Photosmart C 4450, Photosmart C 4470, Photosmart C 4475, Photosmart C 4480, Photosmart C 4485, Photosmart C 4486, Photosmart C 4488, Photosmart C 4500 Series, Photosmart C 4524, Photosmart C 4540, Photosmart C 4550, Photosmart C 4570, Photosmart C 4572, Photosmart C 4575, Photosmart C 4580, Photosmart C 4583, Photosmart C 4585, Photosmart C 4588, Photosmart C 4599, Photosmart C 5200 Series, Photosmart C 5240, Photosmart C 5250, Photosmart C 5270, Photosmart C 5275, Photosmart C 5280, Photosmart C 5283, Photosmart C 5290, Photosmart C 5580, Photosmart D 5300 Series, Photosmart D 5345, Photosmart D 5355, Photosmart D 5360, Photosmart D 5368. Yield according to: ISO/IEC 24711. Inkjet cartridge compatible for: HP DeskJet D 4200 Series, DeskJet D 4260, DeskJet D 4300 Series, DeskJet D 4360, DeskJet D 4368, OfficeJet J 5725, OfficeJet J 5730, OfficeJet J 5735, OfficeJet J 5740, OfficeJet J 5742, OfficeJet J 5750, OfficeJet J 5780, OfficeJet J 5783, OfficeJet J 5785, OfficeJet J 6400 Series, OfficeJet J 6405, OfficeJet J 6410, OfficeJet J 6413, OfficeJet J 6415, OfficeJet J 6424, OfficeJet J 6450, OfficeJet J 6480, OfficeJet J 6488, Photosmart C 4200 Series, Photosmart C 4225, Photosmart C 4270, Photosmart C 4280, Photosmart C 4283, Photosmart C 4300 Series, Photosmart C 4324, Photosmart C 4340, Photosmart C 4345, Photosmart C 4380, Photosmart C 4384, Photosmart C 4385, Photosmart C 4390, Photosmart C 4400 Series, Photosmart C 4410, Photosmart C 4424, Photosmart C 4435, Photosmart C 4440, Photosmart C 4450, Photosmart C 4470, Photosmart C 4475, Photosmart C 4480, Photosmart C 4485, Photosmart C 4486, Photosmart C 4488, Photosmart C 4500 Series, Photosmart C 4524, Photosmart C 4540, Photosmart C 4550, Photosmart C 4570, Photosmart C 4572, Photosmart C 4575, Photosmart C 4580, Photosmart C 4583, Photosmart C 4585, Photosmart C 4588, Photosmart C 4599, Photosmart C 5200 Series, Photosmart C 5240, Photosmart C 5250, Photosmart C 5270, Photosmart C 5275, Photosmart C 5280, Photosmart C 5283, Photosmart C 5290, Photosmart C 5580, Photosmart D 5300 Series, Photosmart D 5345, Photosmart D 5355, Photosmart D 5360, Photosmart D 5368.'
+        headline:
+          type: string
+          example: EDD-254 HP 351XL (CB338EE) - 3-Farbig - 22 ml
+        brandname:
+          type: string
+          example: edding
+        manufacturer:
+          type: string
+          example: edding
+        fucntionalDescription:
+          type: string
+          example: Druckerpatrone
+        kindText:
+          type: string
+          example: Druckerpatrone
+        deliverable:
+          type: boolean
+          example: true
+        flags:
+          type: object
+          properties:
+            isReturnable:
+              type: boolean
+              example: false
+            isBiozio:
+              type: boolean
+              example: false
+            isRecyclable:
+              type: boolean
+              example: false
+            hasSecurityDataSheet:
+              type: boolean
+              example: false
+        packagingHierachies:
+          type: array
+          items:
+            $ref: '#/components/schemas/Packaging'
+        logisitics:
+          type: object
+          properties:
+            quantities:
+              type: object
+              properties:
+                type:
+                  type: string
+                  example: ORDER_MIN_QTY
+                value:
+                  type: integer
+                  example: 1.0000
+                unit:
+                  type: string
+                  example: PCE
+            outOfStock:
+              type: boolean
+              example: false
+            countryOfOrigin:
+              type: string
+              description: Country ISO
+              example: CN
+        weightsAndMeasures:
+          $ref: '#/components/schemas/WeightsAndMeasures'
+        prices:
+          type: array
+          items:
+            $ref: '#/components/schemas/Price'
+        classifications:
+          type: array
+          items:
+            $ref: '#/components/schemas/Classification'
+        assets:
+          type: array
+          items:
+            $ref: '#/components/schemas/Asset'
+        references:
+          type: array
+          items:
+            type: object
+            properties:
+              gtin:
+                type: string
+                example: 4043023602536
+              type:
+                type: string
+                example: CROSS_SELLING
+    Asset:
+      type: object
+      required:
+      - seq
+      - url
+      - category
+      - contentType
+      - checksum
+      properties:
+        seq:
+          type: integer
+          example: 6
+        url:
+          type: string
+          example: https://assets.cntr.pbsnetwork.eu/assets/4004764000005/dsh_4043023602543_de_de.pdf
+        category:
+          type: string
+          example: DSH
+        contentType:
+          type: string
+          example: application/pdf
+        checksum:
+          type: string
+          example: 8D99CF4B5C1EF9697339244F5942E3C1
+    Classification:
+      type: object
+      required:
+      - system
+      - number
+      - name
+      properties:
+        system:
+          type: string
+          example: E_CLASS_10_1
+        number:
+          type: string
+          example: 19140605
+        name:
+          type: string
+          example: Tintenkartusche, Druckkopf (Tintenstrahldrucker)
+        properties:
+          type: array
+          items:
+            $ref: '#/components/schemas/ClassificationProperty'
+    ClassificationProperty:
+      type: object
+      required:
+      - number
+      - desc
+      - value
+      properties:
+        number:
+          type: string
+          example: AAC894
+        desc:
+          type: string
+          example: Inhalt
+        value:
+          type: string
+          example: 22.00
+        valueId:
+          type: string
+          example: CAA017
+    Price:
+      type: object
+      required:
+      - type
+      - validFrom
+      - priceBase
+      - unit
+      - price
+      - currency
+      properties:
+        type:
+          type: string
+          example: LISTBP
+        validFrom:
+          type: string
+          format: date
+          example: '2022-01-01'
+        priceBase:
+          type: integer
+          example: 1
+        unit:
+          type: string
+          example: PCE
+        price:
+          type: integer
+          example: 12.4900
+        currency:
+          type: string
+          example: EUR
+        fromQty:
+          type: integer
+          example: 1.0000
+    WeightsAndMeasures:
+      type: object
+      properties:
+        dimension:
+          type: object
+          properties:
+            height:
+              type: integer
+              example: 55.0000
+            heightUnit:
+              type: string
+              example: MMT
+            width:
+              type: integer
+              example: 31.0000
+            widthUnit:
+              type: string
+              example: MMT
+            length:
+              type: integer
+              example: 70.0000
+            lengthUnit:
+              type: string
+              example: MMT
+        weights:
+          type: object
+          properties:
+            gross:
+              type: integer
+              example: 61.5000
+            grossUnit:
+              type: string
+              example: GRM
+            net:
+              type: integer
+              example: 48.5000
+            netUnit:
+              type: string
+              example: GRM
+        volume:
+          type: object
+          properties:
+            volume:
+              type: integer
+              example: 119.3500
+            unit:
+              type: string
+              example: CMQ
+
+    Packaging:
+      type: object
+      properties:
+        gtin:
+          type: string
+          example: 4004764961016
+        productCode:
+          type: string
+          example: 18-254
+        packageType:
+          type: string
+          example: CT
+        baseItemQty:
+          type: string
+          example: true
+        deliverable:
+          type: string
+          example: true
+        weightsAndMeasurable:
+          $ref: '#/components/schemas/WeightsAndMeasures'
+
+    Error:
+      type: object
+      required:
+      - timestamp
+      - status
+      - error
+      - message
+      - path
+      properties:
+        timestamp:
+          type: string
+          format: date-time
+        status:
+          type: integer
+          format: int46
+        error:
+          type: string
+        message:
+          type: string
+        path:
+          type: string
+security:
+- openId:
+  - user

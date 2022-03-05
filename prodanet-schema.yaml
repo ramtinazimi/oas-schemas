@@ -1,0 +1,400 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Prodanet API
+  description:   <br> 
+    **Introduction.** <br> 
+      This is the API for Prodanet. Also see the [Confluence Documentation](https://karstadt.atlassian.net/wiki/spaces/PB/pages/2261058252/028+CIL+Prodanet) for more information. You can also read the [official PDF documentation](https://karstadt.atlassian.net/wiki/spaces/PB/pages/2261058252/028+CIL+Prodanet#1.1---API-Documentation) <br><br>
+
+    **Authentication.** <br>The Prodanet API uses a 2-step-authentication. Here are the steps, but also refer to the CIL Postman Collection:<br> <br>
+    1st step | Retrieve token from Auth Server <br> 
+      The PUT-endpoint *https://api.prodanet.com/CentralServiceAPI/V1/Session* with an appkey and servicekey are being used to connect to the authentication server. The authentication server then returns an URL, e.g.  *https://api-p01.prodanet.com/ProductDataAPI/V7/a9a5e9df-7029-420b-b99a-4198610c0764/* <br><br>
+      2nd step | Use the URL from Step 1 <br>
+        Use the URL from step 1 as the base url to access the resource endpoints (see below), e.g.  *https://api-p01.prodanet.com/ProductDataAPI/V7/a9a5e9df-7029-420b-b99a-4198610c0764/ProductData/4242005087396*<br><br>
+      
+    **Important Note.** <br>
+      This is not an offical Prodanet documentation.<br> 
+      The Galeria CIL team has created this documentation to ease the technical integration. 
+      In case Prodanet makes changes to the API, this documentation has to be manually adjusted. <br><br>
+    
+    **Questions?** <br>
+        For assistance, feedback or errors, please get in touch with [Ramtin from Galeria](ramtin.azimi.extern@galeria.de) or the offical Prodnaet Support (see below).
+  contact:
+    name: API Support by Prodanet
+    email: patrick.mueller@prodanet.com
+servers:
+  - url: https://api-p01.prodanet.com/ProductDataAPI/V7/a9a5e9df-7029-420b-b99a-4198610c0764/
+    description: Ex. base url from auth step 1
+tags:
+  - name: Endpoints for GKK
+paths:
+  /ProductData/V7/{GTIN}:
+    get:
+      tags:
+        - Endpoints for GKK
+      security:
+        - openId:
+          - user
+      summary: Retrieve article
+      description: Returns an article by its GTIN.
+      operationId: getPartners
+      parameters:
+        - name: GTIN
+          in: path
+          description: The global trade item number (GTIN)
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: A paged array of suppliers and paging information
+          content:
+            application/json:
+              schema:
+                required:
+                  - Type
+                  - Header
+                  - ProductRecords
+                  - PrductDataMessage
+                properties:
+                  Type:
+                    type: string
+                    example: "generic"
+                  Header:
+                    $ref: '#/components/schemas/Header'
+                  ProductRecords:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/ProductRecord'
+                  ProductDataMessage:
+                    type: array
+                    items:
+                      type: string
+        '401':
+          description: Article does not exist in the Prodanet database.
+
+
+components:
+  securitySchemes:
+    openId:
+      type: openIdConnect
+      openIdConnectUrl: https://auth.pbsnetwork.eu/auth/realms/pbs/protocol/openid-connect/token
+  responses:
+    '401':
+        description: Article does not exist in the Prodnanet database.
+  schemas:
+    Header:
+      type: object
+      required:
+        - VersionNumber
+        - RevisionNumber
+        - Timestamp
+        - Country
+        - Language
+        - Sender
+        - Receiver
+        - PropertyDefinitionVersionId
+      properties:
+        VersionNumber:
+          type: integer
+          format: int46
+          example: 1
+        RevisionNumber:
+          type: integer
+          format: int46
+          example: 1
+        Timestamp:
+          type: string
+          example: "2021-12-23T15:26:39.5186389+01:00"
+        Country:
+          type: string
+          example: "DE"
+        Language:
+          type: string
+          example: "de"
+        Sender:
+          type: string
+          example: "Prodanet"
+        Receiver:
+          type: string
+          example: "100000"
+        PropertyDefinitionVersionId:
+          type: integer
+          example: 0
+
+    ProductRecord:
+      type: object
+      required:
+        - ProdanetGTIN
+        - ProductMasterRecord
+        - ProductFeatureRecord
+        - ProductMarketingRecordWeb
+        - ProductAssetRecord
+        - ProductAccessoryRecord
+        - ProductDataMessages
+      properties:
+        ProdanetGTIN:
+          type: integer
+          example: "4062303196916"
+        ProductMasterRecord:
+          $ref: "#/components/schemas/ProductMasterRecord"
+        ProductPropertyRecord:
+          type: object
+          properties:
+            PropertyClasses:
+              type: array
+              items:
+                $ref: "#/components/schemas/PropertyClass"
+        ProductFeatureRecord:
+          type: object
+          properties:
+            Features:
+              type: array
+              items:
+                type: object
+                properties:
+                  FeatureId:
+                    type: string
+                    example: "23245"
+                  Description:
+                    type: string
+                    example: "Bilddiagonale (cm)"
+                  FeatureType:
+                    type: string
+                    example: "Value"
+                  FeatureValue:
+                    type: string
+                    example: "189"
+                  FeatureText:
+                    type: string
+                    example: "189 cm Bilddiagonale"
+        ProductMarketingRecordWeb:
+          type: object
+          properties:
+            ProductGroupDescriptionWeb:
+              type: string
+              example: "189 cm (75\") QLED-TV"
+            ShortDescriptionNameGroupColorWeb:
+              type: string
+              example: "GQ75Q60TGU 189 cm (75\") QLED-TV nachtschwarz"
+            LongDescriptionEmotionalStandardWeb:
+              type: string
+              example: "<strong>Eine Milliarde Farbtöne, 100% Farbvolumen mit Quantum Dot</strong><br><br> Die Quantum Dot Technologie sorgt für das beste Bild, das wir je erschaffen haben. Die so genannten Quantum Dots nehmen das Licht auf und verwandeln es in atemberaubende Farben mit 100% Farbvolumen, die unter unterschiedlichsten Lichtsituationen gleich kräftig bleiben – und das nahezu ohne Farbverlust.<br><br> <strong>Jede Szene im richtigen Farbton</strong><br><br> <strong>Dual LED</strong><br><br> Die von Samsung neu eingesetzte Dual LED-Hintergrundbeleuchtung verfügt über einen großen Farbtonbereich dank Einsatz zweier Beleuchtungs-LED-Typen und kann damit den Farbton richtig gut an die TV-Inhalte anpassen. Freue dich auf ein instinktives und realistisches Filmerlebnis.<br><br> <strong>Quantum HDR für unglaubliche Details und tiefe Kontraste</strong><br><br> Mit Quantum HDR kommen Details und Kontraste deutlich zum Vorschein. Das Zusammenspiel von Dynamic Tone Mapping und HDR10+ erzeugt dabei tiefe Schwarzwerte, lebendige Bilder und brillante Details in nahezu jeder Szene.<br><br> <i>* Die Leuchtkraftwerte von Q HDR basieren auf Laborbedingungen. Sie können je nach Betrachtungsumgebung oder spezifischen Bedingungen variieren.<br> ** Dies trifft auf die Samsung 2020 QLED TV Modelle Q60T und Q70T zu.</i><br><br> <strong>Mitreißende Bildqualität</strong><br><br> <strong>Quantum Prozessor Lite</strong><br><br> Genieße eine Bildqualität mit 100% Farbvolumen. Der Quantum Prozessor Lite optimiert mit seinem Chip das Kontrastverhältnis und stellt mit HDR ein unglaublich breites Farbspektrum dar.<br><br> <strong>Noch mehr Bild und weniger Gerät</strong><br><br> <strong>3-seitiges rahmenloses Design</strong><br><br> Freue dich auf ein schlankes und elegantes TV-Gerät, das mit seinem minimalistischen und fast rahmenlosen Design den Fokus aus unterschiedlichen Blickwinkeln ganz aufs Bild legt und damit zu einem echten Designstück wird. Fernsehen fast wie im Kino.<br><br> <strong>Ambient Mode - schmücke dein Wohnzimmer mit deinen Lieblingsfotos</strong><br><br> Zeige deine Lieblingsbilder auf dem TV-Bildschirm und erlebe, wie sich der TV elegant in deine Dekoration einfügt. Erstelle aus deinen Bildern eine Foto-Collage oder bringe mit einer Slide-Show Abwechslung in dein Leben.<br><br> <i>* Die Genauigkeit der Hintergrund-Funktion kann je nach Aufstellung des TV-Geräts und Beschaffenheit bzw. Farbe der Wand variieren.</i><br><br> <strong>Smart Hub & One Remote - eine einzige Fernbedienung für alle Inhalte</strong><br><br> Die schlanke und handliche One Remote Fernbedienung macht es ganz einfach, jede Menge unterschiedlicher Inhalte schnell an einem Ort zu finden und auszuwählen – egal ob auf der Set-Top-Box, der Spielkonsole, vom Live-TV oder in deinen Apps.<br><br> <i>* Der Service ist möglicherweise beim Verkaufsstart der QLED-Serie noch nicht verfügbar und kann je nach Region variieren.</i><br><br> <strong>Jetzt im Programm: Dein Lieblingsprogramm</strong><br><br> <strong>Universal Guide</strong><br><br> Der Universal Guide ist in der Lage, dir aus deiner Liste von TV-Content und Streaminganbietern genau die Inhalte vorzuschlagen, die zu deinen Interessen passen. So verschwendest du keine Zeit mit Suchen, sondern kannst ganz bequem auf deine Lieblings-Inhalte zugreifen, ohne eine App dafür zu öffnen.<br><br> <i>* Die Inhaltsdienste können je nach Region variieren und sich ohne vorherige Benachrichtigung ändern.</i><br><br> <strong>Dein TV hört aufs Wort</strong><br><br> <strong>Sprachassistenten</strong><br><br> Fernsehen kann mit den integrierten Sprachassistenten Bixby und Alexa so einfach sein. Sag einfach, was du möchtest und erhalte Antworten auf deine Fragen oder Zugang zu deinen Lieblingsinhalten. Steuere dein TV-Gerät und dein vernetztes Zuhause mit deiner Stimme.<br><br> <i>* Die Inhaltsdienste können je nach Region variieren und sich ohne vorherige Benachrichtigung ändern. Multi Voice versteht Sprachbefehle auf Deutsch, Englisch (USA & UK), Französisch, Spanisch, Italienisch, Chinesisch und Koreanisch. Bestimmte Dialekte und Redewendungen werden unter Umständen nicht erkannt.<br> * Die Bildinhalte sind simuliert und dienen nur zu illustrativen Zwecken.<br> * Amazon, Alexa und alle zugehörigen Logos sind Markenzeichen von Amazon.com, Inc. oder ihrer Tochtergesellschaften.</i><br><br> <strong>Der erste Schritt ins Smart Home: QLED</strong><br><br> <strong>SmartThings Dashboard</strong><br><br> Da dein QLED-TV mit der SmartThings App kompatibel ist, kannst du dein Smart Home ganz einfach koordinieren. Steuere mit dem QLED-TV deine kompatiblen Lampen oder synchronisiere deinen QLED mit deinen bevorzugten SmartHome-Geräten, wie dem Kühlschrank. Erlebe eine vernetzte Welt. <br><br> <strong>Made for Germany</strong><br><br> Samsung Collection* inkl. Sportworld<br> Unicable (Einkabellösung für Satellitenempfang)<br> HbbTV (Zugang u.a. zu Mediatheken)<br> Vorsortierte TV-Sender-Listen<br> DVB-T2-HD-Anschluss<br><br> <i>*weitere Informationen unter samsung.de/collection</i> <br><br> <strong>Das beste HD+ aller Zeiten.</strong> <ul> <li>private Sender in HD- und UHD-Qualität</li> <li>HD+ Komfort-Funktion mit Neustart, Mediatheken und UHD-Switch</li> <li>6 Monate gratis testen - ohne Registrierung</li> </ul> <strong>Die HD+ Komfort-Funktion im Detail:</strong> <ul> <li>Neustart: Nie wieder was verpassen. Jederzeit ausgewählte Sendungen einfach nochmal von vorne starten.</li> <li>Mediatheken: Riesige Auswahl. Zahlreiche Mediatheken von freien und privaten Sendern gleichzeitig durchsuchen.</li> <li>UHD-Switch: Immer das beste Bild. Sofort erfahren, wenn es die laufende Sendung auch in UHD gibt."
+            LongDescriptionTechnicalStandardWeb:
+              type: string
+              example: ""
+            TeaserTextWeb:
+              type: string
+              example: "Bildqualität auf dem nächsten Level"
+            HighlightTextsWeb:
+              type: array
+              items:
+                type: object
+                properties:
+                  Text:
+                    type: string
+                    example: "3.840 x 2.160 4K Ultra-HD QLED-TV mit Dual LED-Technologie"
+                  Order:
+                    type: string
+                    example: "1"
+        ProductAssetRecord:
+          type: array
+          items:
+            type: object
+            properties:
+              AssetGUID:
+                type: string
+                example: "b26f2a02-8e7c-4c8d-9861-182dbbcd4c01"
+              Indentifier:
+                type: string
+                example: null
+              Format:
+                type: string
+                example: "image/jpeg"
+              Type:
+                type: string
+                example: "product image"
+              TypeId:
+                type: integer
+                example: 0
+              Purpose:
+                type: string
+                example: "default image"
+              Description:
+                type: string
+                example: null
+              ValidFrom:
+                type: string
+                example: null
+              ValidUntil:
+                type: string
+                example: null
+        ProductAccessoryRecord:
+          type: object
+          properties:
+            Accessoires:
+              type: object
+              properties:
+                ProdanetGTIN:
+                  type: string
+                  example: "4062301563697"
+                GTIN:
+                  type: string
+                  example: "8801643906375"
+        ProductDataMessages:
+          type: array
+          items:
+            properties:
+              Id:
+                type: integer
+              LocalizedMessage:
+                type: array
+                items:
+                  properties:
+                    CultureString:
+                      type: string
+                    Message:
+                      type: string
+
+    PropertyClass:
+      type: object
+      required:
+        - Id
+        - Name
+        - PropertyGroups
+      properties:
+        Id:
+          type: string
+          example: "200100100"
+        Name:
+          type: string
+          example: "TV-Geräte"
+        PropertyGroups:
+          type: array
+          items:
+             $ref: "#/components/schemas/PropertyGroup"
+
+    PropertyGroup:
+      type: object
+      required:
+        - Id
+        - Name
+      properties:
+        Id:
+          type: string
+          example: "201100000"
+        Name:
+          type: string
+          example: "Produkttyp"
+        Properties:
+          type: array
+          items:
+            $ref: "#/components/schemas/Property"
+
+    Property:
+      type: object
+      required:
+        - Id
+        - Name
+        - Type
+        - Value
+        - ListValues
+        - Unit
+        - EnergyLabel
+      properties:
+        Id:
+          type: string
+          example: "202001029"
+        Name:
+          type: string
+          example: "Technologie"
+        Type:
+          type: string
+          example: "VALUELIST"
+        Value:
+          type: string
+          example: null
+        ListValues:
+          type: array
+          items:
+            type: object
+            properties:
+              Id:
+                type: integer
+                example: 203004009
+              Name:
+                type: string
+                example: "LCD"
+        Unit:
+          type: object
+          properties:
+            Code:
+              type: string
+              example: "kWh/1000h"
+            Name:
+              type: string
+              example: "Kilowatt Stunde/1000 Stunden"
+            Symbol:
+              type: string
+              example: "kWh/1000h"
+            Order:
+              type: integer
+              example: 1526
+        EnergyLabel:
+          type: object
+          properties:
+            DisplayOrder:
+              type: integer
+              example: 40
+            Condition:
+              type: string
+              example: null
+
+    ProductMasterRecord:
+      type: object
+      required:
+        - ProdanetGTIN
+        - BrandId
+        - Brand
+        - ProductName
+        - ProductColor
+        - ManunfacturerProductCode
+        - GTIN
+        - ProductGroupId
+        - ProductGroupName
+      properties:
+        ProdnetGTIN:
+          type: integer
+          example: "4062303196916"
+        BrandId:
+          type: integer
+          example: "225"
+        Brand:
+          type: string
+          example: "Samsung"
+        ProductName:
+          type: string
+          example: "GQ75Q60TGU"
+        ProductColor:
+          type: string
+          example: "nachtschwarz"
+        ManufacturerProductCode:
+          type: string
+          example: "GQ75Q60TGUXZG"
+        GTIN:
+          type: string
+          example: "8806090318511"
+        ProductGroupId:
+          type: string
+          example: "21844"
+        ProductGroupName:
+          type: string
+          example: "LCD-TV ab 70\" (178cm)"
+
+
+
+
+security:
+  - openId:
+    - user

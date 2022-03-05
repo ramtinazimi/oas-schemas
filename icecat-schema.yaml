@@ -1,0 +1,911 @@
+openapi: 3.0.0
+info:
+  version: 1.0.0
+  title: Icecat API
+  description: "<br> **Introduction.** <br> This is the API for Icecat. For more information, read the [Icecat Blog](https://iceclog.com/). In particular, these blog articles may be of interest - [Asset Types](https://iceclog.com/digital-asset-types-as-represented-in-icecats-open-catalog-interfaces/), [Manual for Product Request](https://iceclog.com/manual-for-icecat-json-product-requests/), [Access Tokens](https://iceclog.com/access-tokens-as-an-alternative-to-ip-whitelists/). <br><br>\n**Authentication.** <br> The Icecat API uses two set of Tokens (API Token, Content Token) in Headers of an endpoint to authenticate requests. You can view and manage your API Token in the [Icecat Dashboard](https://icecat.biz/authorization#accessTokens). For access to the dashboard and an already generated API Token, look into this [Jira ticket](https://karstadt.atlassian.net/browse/BY-1957). <br><br>\n**Important Note.** <br> This is not an offical Icecat documentation.<br> The Galeria CIL team has created this documentation to ease the technical integration. In case Icecat makes changes to the API, this documentation has to be manually adjusted. <br><br>\n**Questions?** <br> For assistance, feedback or errors, please get in touch with [Ramtin from Galeria](ramtin.azimi.extern@galeria.de) or the offical Icecat Support (see below)."
+  contact:
+    name: Icecat Offical API Support (Ulrich Silberbach)
+    email: ulrich.silberbach@icecat.com
+servers:
+- url: https://live.icecat.biz/
+  description: Production server
+tags:
+- name: Endpoints for GKK
+paths:
+  /api:
+    get:
+      tags:
+      - Endpoints for GKK
+      summary: Retrieve a product
+      description: Returns a  a product and its details.
+      operationId: getProduct
+      parameters:
+      - name: GTIN
+        in: query
+        description: >-
+          The product GTIN for the product.
+        required: true
+        schema:
+          type: string
+          enum:
+          - de
+          - en
+          - fr
+        example: de
+      - name: Language
+        in: query
+        description: >-
+          The language ISO (de, en, fr) determines in which language the
+          content should be delivered. **Choose de for GKK**
+        required: true
+        schema:
+          type: string
+          enum:
+          - de
+          - en
+          - fr
+        example: de
+      - name: API-Token
+        in: header
+        schema:
+          type: string
+        required: true
+      - name: Content-Token
+        in: header
+        schema:
+          type: string
+        required: true
+      responses:
+        '200':
+          description: A paged array of suppliers and paging information
+          content:
+            application/json:
+              schema:
+                properties:
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    type: object
+                    properties:
+                      Dictionary:
+                        $ref: '#/components/schemas/Dictionary'
+                      GeneralInfo:
+                        $ref: '#/components/schemas/GeneralInfo'
+                      Image:
+                        $ref: '#/components/schemas/Image'
+                      Multimedia:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Multimedia'
+                      Gallery:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Gallery'
+                      FeaturesGroup:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/FeaturesGroup'
+                      FeatureLogos:
+                        $ref: '#/components/schemas/FeatureLogos'
+                      ReasonsToBuy:
+                        $ref: '#/components/schemas/ReasonsToBuy'
+                      Reviews:
+                        $ref: '#/components/schemas/Reviews'
+                      ProductRelated:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/ProductRelated'
+                      Variants:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/Variant'
+                      ProductStory:
+                        $ref: '#/components/schemas/ProductStory'
+                      DemoAccount:
+                        type: boolean
+                        example: false
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '404':
+          $ref: '#/components/responses/NotFound'
+        default:
+          description: unexpected error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+
+components:
+  securitySchemes:
+    openId:
+      type: openIdConnect
+      openIdConnectUrl: https://auth.pbsnetwork.eu/auth/realms/pbs/protocol/openid-connect/token
+  responses:
+    BadRequest:
+      description: Bad Request
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            GTINIncorrect:
+              value:
+                StatusCode: 16
+                Code: 400
+                Error: Bad Request
+                Message: Product EAN is not correct
+            APITokenIncorrectFormat:
+              value:
+                StatusCode: 19
+                Code: 400
+                Error: Bad Request
+                Message: API Token is not valid UUID
+    NotFound:
+      description: Not Found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            LanguageNotFound:
+              value:
+                StatusCode: 2
+                Code: 404
+                Error: Not Found
+                Message: Lang is unknown
+            APITokenNotFound:
+              value:
+                StatusCode: 18
+                Code: 404
+                Error: Not Found
+                Message: Not found user by API Token
+
+
+  schemas:
+    Dictionary:
+      type: object
+      required:
+      - zoom_panel_in
+      properties:
+        zoom_panel_in:
+          type: string
+          example: Originale Gr&ouml;&szlig;e
+        flash360:
+          type: string
+          example: 3D tour
+        video:
+          type: string
+          example: Video
+        pdf_specs:
+          type: string
+          example: Datenblatt
+        specs:
+          type: string
+          example: Spezifikationen
+        pdf_url:
+          type: string
+          example: Benutzerhandbuch
+        demo_msg_part1:
+          type: string
+          example: ''
+        product_family:
+          type: string
+          example: Produktfamilie
+        reasons_to_buy:
+          type: string
+          example: Kaufgr&uuml;nde
+        back_to_top:
+          type: string
+          example: Back to top
+        product_series:
+          type: string
+        cat_name:
+          type: string
+        reviews_head_name:
+          type: string
+        demo_msg_part2:
+          type: string
+        demo_insert_desc:
+          type: string
+        eu_energy_label:
+          type: string
+        ean_code:
+          type: string
+        supplier_name:
+          type: string
+        marketing_text:
+          type: string
+        eu_product_fiche:
+          type: string
+        options_head_name:
+          type: string
+        zoom_panel_ini:
+          type: string
+        zoom_panel_out:
+          type: string
+        zoom_panel_dragg:
+          type: string
+        demo_msg_part3:
+          type: string
+        desc:
+          type: string
+        prod_code:
+          type: string
+        model_name:
+          type: string
+        release_date:
+          type: string
+    GeneralInfo:
+      type: object
+      required:
+      - IcecatId
+      properties:
+        IcecatId:
+          type: integer
+          example: 75688526
+        ReleaseDate:
+          type: string
+          format: date
+          example: 18-10-2019
+        EndOfLifeDate:
+          type: string
+          format: date
+          example: ''
+        Title:
+          type: string
+          example: HP OMEN by HP Obelisk 875-1018ng DDR4-SDRAM i9-9900K Tower Intel® Core™ i9 der 9. Generation 64 GB 4000 GB HDD+SSD Windows 10 Home PC Schwarz
+        TitleInfo:
+          type: object
+          properties:
+            GeneratedIntTitle:
+              type: string
+              example: HP OMEN by HP Obelisk 875-1018ng
+            GeneratedLocalTitle:
+              type: object
+              properties:
+                Value:
+                  type: string
+                  example: HP OMEN by HP Obelisk 875-1018ng DDR4-SDRAM i9-9900K Tower Intel® Core™ i9 der 9. Generation 64 GB 4000 GB HDD+SSD Windows 10 Home PC Schwarz
+                Language:
+                  type: string
+                  example: DE
+            BrandLocalTitle:
+              type: object
+              properties:
+                Value:
+                  type: string
+                  example: ''
+                Language:
+                  type: string
+                  example: DE
+        Brand:
+          type: string
+          example: HP
+        BrandId:
+          type: string
+          example: '1'
+        BrandLogo:
+          type: string
+          example: https://images.icecat.biz/img/brand/thumb/1_cf8603f6de7b4c4d8ac4f5f0ef439a05.jpg
+        BrandInfo:
+          type: object
+          properties:
+            BrandName:
+              type: string
+              example: HP
+            BrandLocalName:
+              type: string
+              example: ''
+            BrandLogo:
+              type: string
+              example: https://images.icecat.biz/img/brand/thumb/1_cf8603f6de7b4c4d8ac4f5f0ef439a05.jpg
+        ProductName:
+          type: string
+          example: 875-1018ng
+        ProductNameInfo:
+          type: object
+          properties:
+            ProductIntName:
+              type: string
+              example: 875-1018ng
+            ProductLocalName:
+              type: string
+              properties:
+                Value:
+                  type: string
+                  example: ''
+                Language:
+                  type: string
+                  example: DE
+        BrandPartInfo:
+          type: object
+          properties:
+            BrandName:
+              type: string
+            BrandLocalName:
+              type: string
+            BrandLogo:
+              type: string
+        BrandPartCode:
+          type: string
+          example: 8XF24EA
+        GTIN:
+          type: array
+          items:
+            type: string
+          example: ['0194721405951']
+        Category:
+          type: object
+          properties:
+            CategoryID:
+              type: string
+              example: '153'
+            Name:
+              type: object
+              properties:
+                Value:
+                  type: string
+                  example: PCs/Workstations
+                Language:
+                  type: string
+                  example: DE
+        ProductFamily:
+          type: object
+          properties:
+            ProductFamilyID:
+              type: string
+              example: '71481'
+            Value:
+              type: string
+              example: OMEN by HP Obelisk
+            Language:
+              type: string
+              example: EN
+        ProductSeries:
+          type: object
+          properties:
+            SeriesID:
+              type: string
+              example: '6939'
+            Value:
+              type: string
+              example: '875'
+            Language:
+              type: string
+              example: EN
+        Description:
+          type: object
+          properties:
+            ID:
+              type: string
+              example: '70228862'
+            LongDesc:
+              type: string
+              example: <b>Schlank, leistungsstark und einfach upzugraden.</b>Lasse dich durch nichts von deinen Bestleistungen abbringen. Mit den neuesten Komponenten der Branche, microATX-kompatibler Upgrade-Fähigkeit und individuell anpassbarem Design liefert der OMEN Obelisk die nötige Performance für neue Bestleistungen.
+            LongProductName:
+              type: string
+              example: Intel Core i9-9900K (16MB Cache, 3.6GHz), 64GB DDR4-SDRAM, 3000GB HDD, 1000GB SSD, Intel UHD Graphics 630, NVIDIA GeForce RTX 2080 Ti (11GB GDDR6), LAN, WLAN, Bluetooth, Windows 10 Home 64-bit
+            MiddleDesc:
+              type: string
+              example: Hole dir die nötige Performance für Bestleistungen mit den neuesten Komponenten der Branche, microATX-kompatibler Erweiterbarkeit und individuell anpassbarem Design.
+            Disclaimer:
+              type: string
+              example: ''
+            ManualPDFURL:
+              type: string
+              example: ''
+            ManualPDFSize:
+              type: string
+              example: '0'
+            LeafletPDFURL:
+              type: string
+              example: ''
+            PDFSize:
+              type: string
+              example: ''
+            URL:
+              type: string
+              example: https://www8.hp.com
+            WarrantyInfo:
+              type: string
+              example: ''
+            Updated:
+              type: string
+              example: '2019-10-07 12:27:40'
+            Language:
+              type: string
+              example: DE
+        SummaryDescription:
+          type: object
+          properties:
+            ShortSummaryDescription:
+              type: string
+              description: HP OMEN by HP Obelisk 875-1018ng, 3,6 GHz, Intel® Core™ i9 der 9. Generation, i9-9900K, 64 GB, 4000 GB, Windows 10 Home
+            LongSummerayDescription:
+              type: string
+              description: 'HP OMEN by HP Obelisk 875-1018ng. Prozessor-Taktfrequenz: 3,6 GHz, Prozessorfamilie: Intel® Core™ i9 der 9. Generation, Prozessor: i9-9900K. RAM-Speicher: 64 GB, Interner Speichertyp: DDR4-SDRAM, Speichertaktfrequenz: 2666 MHz. Gesamtspeicherkapazität: 4000 GB, Speichermedien: HDD+SSD. On-Board Grafikadaptermodell: Intel® UHD Graphics 630, Dediziertes Grafikadaptermodell: NVIDIA® GeForce RTX™ 2080 Ti. Installiertes Betriebssystem: Windows 10 Home, Betriebssystemsarchitektur: 64-Bit. Stromversorgung: 750 W. Gehäusetyp: Tower. Produkttyp: PC'
+        BulletPoints:
+          type: object
+          properties:
+            BulletPointsId:
+              type: string
+              example: '2514721'
+            Language:
+              type: string
+              example: DE
+            Values:
+              type: array
+              items:
+                type: string
+              example: [Windows 10 Home 64-bit, 'Intel Core i9-9900K (16MB Cache, 3.6GHz)', NVIDIA GeForce RTX 2080 Ti (11GB GDDR6), '64GB (2666MHz) DDR4-SDRAM (4 x 16) & 3000GB HDD, 1000GB SSD']
+            Updated:
+              type: string
+              example: '2019-10-07 12:27:39'
+    Image:
+      type: object
+      properties:
+        HighPic:
+          type: string
+          example: https://images.icecat.biz/img/gallery/75688526_7788228260.jpg
+        HighPicSize:
+          type: integer
+          example: 0
+        HighPicHeight:
+          type: string
+          example: '2529'
+        HighPicWidth:
+          type: string
+          example: '1295'
+        LowPic:
+          type: string
+          example: https://images.icecat.biz/img/gallery_lows/75688526_7788228260.jpg
+        LowPicSize:
+          type: integer
+          example: 0
+        LowPicHeight:
+          type: string
+          example: '200'
+        LowPicWidth:
+          type: string
+          example: '102'
+        Pic500x500:
+          type: string
+          example: https://images.icecat.biz/img/gallery_mediums/75688526_7788228260.jpg
+        Pic500x500Size:
+          type: integer
+          example: 0
+        Pic500x500Height:
+          type: string
+          example: '500'
+        Pic500x500Width:
+          type: string
+          example: '256'
+        ThumbPic:
+          type: string
+          example: https://images.icecat.biz/img/gallery_thumbs/75688526_7788228260.jpg
+        ThumbPicSize:
+          type: integer
+          example: 0
+    Multimedia:
+      type: object
+      properties:
+        ID:
+          type: string
+          example: EF20F6FC-2957-44B7-AA8F-A27DF558F07B
+        URL:
+          type: string
+          example: https://objects.icecat.biz/objects/mmo_75688526_1580192014_6502_914.pdf
+        Type:
+          type: string
+          example: leaflet
+        ContentType:
+          type: string
+          example: application/pdf
+        KeepAsUrl:
+          type: string
+          example: '0'
+        Description:
+          type: string
+          example: Datenblatt
+        Size:
+          type: string
+          example: '2411554'
+        IsPrivate:
+          type: string
+          example: '0'
+        Updated:
+          type: string
+          example: '2020-01-28 07:13:34'
+        Language:
+          type: string
+          example: DE
+        isVideo:
+          type: integer
+          example: 0
+
+    Gallery:
+      type: object
+      properties:
+        ID:
+          type: string
+          example: '47798824'
+        LowPic:
+          type: string
+          example: https://images.icecat.biz/img/gallery_lows/75688526_4820528061.jpg
+        LowSize:
+          type: string
+          example: 0
+        LowHeight:
+          type: string
+          example: '200'
+        LowWidth:
+          type: string
+          example: '116'
+        ThumbPic:
+          type: string
+          example: https://images.icecat.biz/img/gallery_thumbs/75688526_4820528061.jpg
+        ThumbPicSize:
+          type: integer
+          example: 0
+        Pic:
+          type: string
+          example: https://images.icecat.biz/img/gallery/75688526_4820528061.jpg
+        Size:
+          type: integer
+          example: 0
+        PicHeight:
+          type: string
+          example: '2548'
+        PicWidth:
+          type: string
+          example: '1479'
+        Pic500x500:
+          type: string
+          example: https://images.icecat.biz/img/gallery_mediums/75688526_4820528061.jpg
+        Pic500x500Size:
+          type: string
+          example: 0
+        Pic500x500Height:
+          type: string
+          example: '500'
+        Pic500x500Width:
+          type: string
+          example: '290'
+        No:
+          type: string
+          example: '2'
+        IsMain:
+          type: string
+          example: N
+        Updated:
+          type: string
+          example: '2020-11-06 12:31:32'
+        IsPrivate:
+          type: string
+          example: '0'
+        Type:
+          type: string
+          example: ProductImage
+        Attribtues:
+          type: object
+          properties:
+            OriginalFileName:
+              type: string
+              example: ''
+    FeaturesGroup:
+      type: object
+      properties:
+        id:
+          type: integer
+        SortNo:
+          type: integer
+        Featuregroup:
+          type: object
+          properties:
+            ID:
+              type: string
+            Name:
+              type: string
+            Language:
+              type: string
+            Features:
+              type: array
+              items:
+                $ref: '#/components/schemas/Feature'
+
+    Feature:
+      type: object
+      required:
+      - ID
+      - LocalID
+      properties:
+        Localized:
+          type: integer
+          example: 0
+        ID:
+          type: integer
+          example: 335300677
+        LocalID:
+          type: string
+          example: 0
+        Type:
+          type: string
+          example: dropdown
+        Value:
+          type: string
+          example: i9-9900K
+        CategoryFeatureId:
+          type: string
+          example: '62'
+        CategoryFeatureGroupId:
+          type: string
+          example: '2'
+        SortNo:
+          type: string
+          example: '10005200'
+        PresentationValue:
+          type: string
+          example: i9-9900K
+        RawValue:
+          type: string
+          example: i9-9900K
+        LocalValue:
+          type: string
+          example: i9-9900K
+        Description:
+          type: string
+          example: The model number for the processor in a computer.
+        Mandatory:
+          type: string
+          example: '1'
+        Searchable:
+          type: string
+          example: '0'
+        Optional:
+          type: string
+          example: '0'
+        Feature:
+          type: object
+          properties:
+            ID:
+              type: string
+              example: '47'
+            Sign:
+              type: string
+              example: ''
+            Measure:
+              type: string
+              properties:
+                ID:
+                  type: string
+                  example: '29'
+                Sign:
+                  type: string
+                  example: ''
+                Signs:
+                  type: object
+                  properties:
+                    ID:
+                      type: string
+                      example: ''
+                    _:
+                      type: string
+                      example: ''
+                    Language:
+                      type: string
+                      example: DE
+            Name:
+              type: object
+              properties:
+                Value:
+                  type: string
+                  example: Prozessor
+                Language:
+                  type: string
+                  example: DE
+
+    FeatureLogos:
+      type: object
+      required:
+      - LogoPic
+      - Width
+      - Height
+      - Size
+      - ThumPic
+      - FeatureID
+      - Value
+      - KeyLogo
+      properties:
+        LogoPic:
+          type: string
+          example: https://images.icecat.biz/img/feature_logo/305-4214.png
+        Width:
+          type: string
+          example: '300'
+        Height:
+          type: string
+          example: '300'
+        Size:
+          type: string
+          example: '0'
+        ThumbPic:
+          type: string
+          example: https://images.icecat.biz/img/feature_logo_thumbs/305-4214.png
+        FeatureID:
+          type: string
+          example: '2196'
+        Value:
+          type: string
+          example: Intel Core i9-9xxx
+        Description:
+          type: object
+          properties:
+            Value:
+              type: string
+              example: 'Intel® Core™ Prozessoren: So schnell und reibungslos arbeiten, spielen und entwickeln wie gewünscht.<br><br>-Schnellere Performance für mehr Fokus, Entwicklungs- und Verbindungsmöglichkeiten<br>-Verbesserte Konnektivität<br>-Videobearbeitung in unter einer Minute'
+            Language:
+              type: string
+              example: DE
+        KeyLogo:
+          type: integer
+          example: 1
+    ReasonsToBuy:
+      type: object
+      properties:
+        ReasonToBuyId:
+          type: string
+          example: '41302839'
+        Value:
+          type: string
+          example: Setze dich mit einem schlanken Gehäuse mit personalisierbarer RGB-Beleuchtung von der Konkurrenz ab.
+        HighPic:
+          type: string
+          example: https://images.icecat.biz/img/bullets/75688526-3739a7f5-8885-439e-a099-cd48ebb84d39.jpg
+        HighPicSize:
+          type: string
+          example: '0'
+        No:
+          type: string
+          example: '2'
+        Title:
+          type: string
+          example: Make it unbeatable
+        Language:
+          type: string
+          example: DE
+        Updated:
+          type: string
+          example: '2019-10-06 14:53:16'
+        Origin:
+          type: string
+          example: RTB
+        IsPrivate:
+          type: string
+          example: '0'
+    Reviews:
+      type: array
+      items:
+        type: string
+    ProductRelated:
+      type: object
+      properties:
+        ID:
+          type: integer
+          example: 175320611
+        CategoryID:
+          type: integer
+          example: 788
+        Preferred:
+          type: integer
+          example: 0
+        IcecatID:
+          type: integer
+          example: 76458302
+        ProductCode:
+          type: string
+          example: UC5Z1PE
+        ThumbPic:
+          type: string
+          example: ''
+        ProductName:
+          type: string
+          example: 1 Jahr Hardware-Support Erneuerung mit Abhol- und Rückgabeservice nach Garantieablauf
+        Brand:
+          type: string
+          example: HP
+        BrandId:
+          type: integer
+          example: 1
+        ProductRelatedLocales:
+          type: array
+          items:
+            $ref: '#/components/schemas/ProductRelatedLocale'
+    ProductRelatedLocale:
+      type: object
+      properties:
+        ID:
+          type: integer
+          example: 100309987
+        Language:
+          type: string
+          example: DE
+        Preferred:
+          type: integer
+          example: 0
+        StartDate:
+          type: string
+          example: ''
+        EndDate:
+          type: string
+          example: ''
+    Variant:
+      type: object
+      properties:
+        VariantID:
+          type: string
+          example: '347758'
+        VariantIdentifiers:
+          type: array
+          items:
+            $ref: '#/components/schemas/VariantIdentifier'
+        VariantFeatures:
+          type: array
+          items:
+            $ref: '#/components/schemas/VariantFeature'
+        VariantImages:
+          type: array
+          items:
+            type: integer
+        VariantMultimedia:
+          type: array
+          items:
+            type: integer
+        VariantDescription:
+          type: string
+          example: OMEN by HP Obelisk DT 875-1018ng PC - Germany - German localization
+    VariantIdentifier:
+      type: object
+      properties:
+        Identifier Type:
+          type: string
+          example: GTIN13
+        Value:
+          type: string
+          example: '0194721405951'
+    VariantFeature:
+      type: object
+      properties:
+        VariantFeature SpecID:
+          type: string
+          example: '42499'
+        Value:
+          type: string
+          example: German,Austrian German
+    ProductStory:
+      type: array
+      items:
+        type: integer
+
+
+
+    Error:
+      type: object
+      required:
+      - StatusCode
+      - Status
+      - Error
+      - Message
+      properties:
+        StatusCode:
+          type: integer
+        Code:
+          type: integer
+        Error:
+          type: string
+        Message:
+          type: string
+
+security:
+- openId:
+  - user

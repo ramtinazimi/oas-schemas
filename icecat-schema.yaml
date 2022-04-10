@@ -810,7 +810,7 @@ paths:
           example: de
           in: query
           name: GTIN
-          required: 'true'
+          required: true
           schema:
             enum:
               - de
@@ -821,7 +821,7 @@ paths:
           example: de
           in: query
           name: Language
-          required: 'true'
+          required: true
           schema:
             enum:
               - de
@@ -830,12 +830,12 @@ paths:
             type: string
         - in: header
           name: API-Token
-          required: 'true'
+          required: true
           schema:
             type: string
         - in: header
           name: Content-Token
-          required: 'true'
+          required: true
           schema:
             type: string
       responses:

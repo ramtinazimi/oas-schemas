@@ -1,0 +1,2563 @@
+openapi: 3.0.0
+info:
+  title: NTG
+  version: 1.0.0
+servers:
+  # Added by API Auto Mocking Plugin
+  - description: Base URL
+    url: https://gkkntg.de/admin/public/index.php/api/
+paths:
+  /getProductList:
+    get:
+      tags:
+        - General
+      summary: Retrieve a Product
+      description: Retrieve a product and its details by GTIN.
+      parameters:
+        - name: ntgtoken
+          in: header
+          schema:
+            type: string
+          example: tRriSTCQrD4iaCtB1zqAl
+        - name: products
+          in: query
+          schema:
+            type: integer
+          example: '9783473496822'
+      responses:
+        '200':
+          description: OK
+          headers:
+            Date:
+              schema:
+                type: string
+                example: Wed, 09 Feb 2022 01:23:45 GMT
+            Server:
+              schema:
+                type: string
+                example: Apache
+            Cache-Control:
+              schema:
+                type: string
+                example: no-cache, private
+            X-RateLimit-Limit:
+              schema:
+                type: integer
+                example: '60'
+            X-RateLimit-Remaining:
+              schema:
+                type: integer
+                example: '59'
+            Access-Control-Allow-Origin:
+              schema:
+                type: string
+                example: '*'
+            Vary:
+              schema:
+                type: string
+                example: Accept-Encoding,User-Agent
+            Content-Encoding:
+              schema:
+                type: string
+                example: gzip
+            Content-Length:
+              schema:
+                type: integer
+                example: '2519'
+            Keep-Alive:
+              schema:
+                type: string
+                example: timeout=5, max=100
+            Connection:
+              schema:
+                type: string
+                example: Keep-Alive
+            Content-Type:
+              schema:
+                type: string
+                example: application/json
+          content:
+            application/json:
+              schema:
+                required:
+                  - error
+                  - message
+                  - data
+                  - PrductDataMessage
+                properties:
+                  error:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: true
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Data'
+              example:
+                error: false
+                message: ''
+                data:
+                  - id_product: '7724'
+                    GLN: 4005556000005
+                    NTG-P-002: Ravensburger Verlag GmbH
+                    NTG-P-003: 4005556000005
+                    NTG-P-004: Ravensburger Verlag GmbH
+                    NTG-P-005: ''
+                    NTG-P-006: 0
+                    gtin: 9783473496822
+                    NTG-P-008: ''
+                    NTG-P-009: 1
+                    attributeGenericBrand: Ravensburger
+                    NTG-P-011: 1
+                    NTG-P-012: 1
+                    NTG-P-013: '49682'
+                    attributeGenericManufacturerArticleNumber: '49682'
+                    attributeGenericArticleTitle: 'Der junge Häuptling Winnetou: Stickerbuch zum Film'
+                    attributeGenericSortedItem: 'false'
+                    NTG-P-017: '073'
+                    NTG-P-018: J
+                    NTG-P-019: ''
+                    NTG-P-020: 10000926
+                    NTG-P-021: 0
+                    NTG-P-022: 0
+                    NTG-P-023: 0
+                    NTG-P-024: ''
+                    NTG-P-025: ''
+                    NTG-P-026: 0
+                    NTG-P-027: 0
+                    attributeGenericNumberOfItemsInMultipacks: 0
+                    NTG-P-029: ''
+                    NTG-P-030: 0
+                    attributeGenericMeasurements.value[0]: 30
+                    attributeGenericMeasurements.value[1]: 23.6
+                    attributeGenericMeasurements.value[2]: 0
+                    attributeGenericVolumeAndWeight.weight.valueWeight: 0.209
+                    attributeGenericVolumeAndWeight.weight.unitWeight: kg
+                    attributeGenericVolumeAndWeight.volume.valueVolume: 0.000354
+                    NTG-P-037: 0.209
+                    NTG-P-038: 0
+                    NTG-P-039: 0
+                    NTG-P-040: 0
+                    NTG-P-041: 0
+                    NTG-P-042: 0
+                    NTG-P-043: 0
+                    NTG-P-044: 0
+                    NTG-P-045: 0
+                    NTG-P-046: 0
+                    NTG-P-047: 0
+                    NTG-P-048: 0
+                    NTG-P-049: ''
+                    NTG-P-050: 9783473496822
+                    NTG-P-051: 0
+                    NTG-P-052: 300
+                    NTG-P-053: 236
+                    NTG-P-054: 5
+                    NTG-P-055: 354
+                    NTG-P-056: 0
+                    NTG-P-057: 0
+                    NTG-P-058: 2160
+                    NTG-P-059: 0
+                    NTG-P-060: 0
+                    NTG-P-061: 0
+                    NTG-P-062: 0
+                    NTG-P-063: 'N'
+                    attributeGenericPackageContents: 0
+                    NTG-P-065: ''
+                    NTG-P-066: 0
+                    NTG-P-067: 6,99
+                    NTG-P-068: 7
+                    NTG-P-069: EUR
+                    NTG-P-070: J
+                    NTG-P-071: ''
+                    NTG-P-072: ''
+                    NTG-P-073: 05.01.2022
+                    NTG-P-074: 01.02.2022
+                    NTG-P-075: ''
+                    NTG-P-076: 6,99
+                    NTG-P-077: Jungen u
+                    NTG-P-078: '5'
+                    attributeGenericTargetGroup.age.fromValue: 5
+                    attributeGenericTargetGroup.age.toValue: 8
+                    NTG-P-081: 0
+                    attributeToysAndGamesMaxQuantityPlayers: 0
+                    attributeGenericPlayingTime: ''
+                    NTG-P-084: 0
+                    NTG-P-085: 0
+                    NTG-P-086: 0
+                    attributeGenericScale: ''
+                    attributeGenericColor[0]: ''
+                    NTG-P-089: 49019900
+                    NTG-P-090: Der junge Häuptling Winnetou
+                    NTG-P-091: ''
+                    NTG-P-092: ''
+                    NTG-P-093: ''
+                    NTG-P-094: ''
+                    NTG-P-095: ''
+                    NTG-P-096: Ravensburger
+                    NTG-P-097: ''
+                    NTG-P-098: 0
+                    attributeToysAndGamesMaterialToys: ''
+                    NTG-P-100: 0
+                    attributeGenericSeries: Bücher
+                    NTG-P-102: 0
+                    NTG-P-103: ''
+                    NTG-P-104: J
+                    NTG-P-105: 'N'
+                    attributeGenericBatteryIncluded: 'false'
+                    NTG-P-107: 0
+                    NTG-P-108: 0
+                    attributeGenericBatteryAndRechargeableBatteryType: ''
+                    NTG-P-110: ''
+                    NTG-P-111: 0
+                    NTG-P-112: ''
+                    NTG-P-113: 'N'
+                    NTG-P-114: 'N'
+                    NTG-P-115: 'N'
+                    NTG-P-116: 0
+                    NTG-P-117: DE
+                    NTG-P-118: 0
+                    NTG-P-119: 0
+                    NTG-P-120: ''
+                    NTG-P-121: ''
+                    NTG-P-122: ''
+                    NTG-P-123: 0
+                    NTG-P-124: 0
+                    NTG-P-125: ''
+                    NTG-P-126: J
+                    NTG-P-127: 2009/48/EU
+                    NTG-P-128: ''
+                    NTG-P-129: ''
+                    NTG-P-130: ''
+                    NTG-P-131: ''
+                    NTG-P-132: 0
+                    NTG-P-133: ''
+                    NTG-P-134: J
+                    NTG-P-135: ''
+                    attributeGenericSafetyNoteToys: Warnhinweis nach Spielzeug-VO nicht erforderlich.
+                    NTG-P-137: ''
+                    attributeYflattenedAttributeGenericCareLabelTextileWashingSplit: ''
+                    NTG-P-139: ''
+                    NTG-P-140: ''
+                    NTG-P-141: ''
+                    NTG-P-142: ''
+                    NTG-P-143: ''
+                    NTG-P-144: ''
+                    NTG-P-145: ''
+                    NTG-P-146: ''
+                    NTG-P-147: ''
+                    NTG-P-148: ''
+                    NTG-P-149: ''
+                    NTG-P-150: ''
+                    NTG-P-151: ''
+                    NTG-P-152: ''
+                    NTG-P-153: ''
+                    NTG-P-154: 'junge Häuptling Winnetou: Stickerbu'
+                    NTG-P-155: ''
+                    attributeGenericArticleDescription: >-
+                      Erlebe die Abenteuer des kleinen Häuptlings!In diesem
+                      Stickerheft zum neuen Kinofilm erfährt der Leser alles
+                      über die Abenteuer des jungen Häuptling Winnetou und
+                      seinen Freunden. Mit vielen wunderbaren Bildern aus dem
+                      Film können junge Western-Fans in die Welt von Winnetou
+                      und seinen Freunden eintauchen und mit farbigen Stickern
+                      selbst weiter gestalten und verschönern. Das perfekte
+                      Geschenk für alle Winnetou-Fans.Winnetous Stamm ist in Not
+                      geraten. Als Sohn des Häuptlings muss der Junge beweisen,
+                      wie mutig er ist. Um seinen Stamm zu retten, stellt
+                      Winnetou sich einem gefährlichen Abenteuer. Dabei bekommt
+                      er Unterstützung von seiner jüngeren Schwester, aber auch
+                      der Stadtjunge Tom eilt zur Hilfe. Eine moderne
+                      Western-Geschichte, die sowohl Karl May-Kenner als auch
+                      jüngere Fans begeistert.
+                    NTG-P-157: ''
+                    NTG-P-158: Mit farbigen Stickern.
+                    NTG-P-159: ''
+                    NTG-P-160: ''
+                    NTG-P-162: DE
+                    NTG-P-163: '7'
+                    NTG-P-164: ''
+                    NTG-P-165: DE
+                    NTG-P-166: DE
+                    NTG-P-167: 0
+                    NTG-P-182: ''
+                    NTG-P-183: ''
+                    NTG-P-184: 0
+                    NTG-P-185: ''
+                    NTG-P-186: ''
+                    NTG-P-187: 0
+                    NTG-P-188: ''
+                    NTG-P-189: 0
+                    NTG-P-190: ''
+                    NTG-P-191: ''
+                    attributeGenericTargetGroup.age.fromUnit: YEAR
+                    attributeGenericTargetGroup.age.toUnit: YEAR
+                    NTG-P-194: ''
+                    NTG-P-195: ''
+                    NTG-P-196: 0
+                    NTG-P-197: 0
+                    NTG-P-198: ''
+                    NTG-P-199: 60
+                    NTG-P-200: 14.4
+                    NTG-P-201: 80
+                    NTG-P-202: ''
+                    NTG-P-203: 'Der junge Häuptling Winnetou:'
+                    attributeGenericLoadingCapacity: 0
+                    NTG-P-205: 0
+                    NTG-P-206: ''
+                    NTG-P-207: ''
+                    NTG-P-208: ''
+                    NTG-P-209: 0
+                    NTG-P-210: neu
+                    NTG-P-211: ''
+                    NTG-P-212: YEAR
+                    NTG-P-213: ''
+                    NTG-P-214: MMT
+                    NTG-P-215: MMT
+                    NTG-P-216: 0
+                    NTG-P-217: 0
+                    NTG-P-218: ''
+                    NTG-P-219: ''
+                    NTG-P-220: ''
+                    NTG-P-221: ''
+                    NTG-P-222: ''
+                    NTG-P-223: ''
+                    NTG-P-224: 'N'
+                    NTG-P-225: 0
+                    NTG-P-226: 'Der junge Häuptling Winnetou: Stickerbuch zum Film'
+                    NTG-P-227: ''
+                    NTG-P-228: J
+                    NTG-P-229: ''
+                    NTG-P-230: ''
+                    NTG-P-231: 0
+                    NTG-P-232: 0
+                    NTG-P-233: 0
+                    NTG-P-234: ''
+                    NTG-P-235: 0
+                    NTG-P-236: 0
+                    NTG-P-237: 0
+                    NTG-P-238: ''
+                    NTG-P-239: 0
+                    NTG-P-240: ''
+                    NTG-P-241: ''
+                    NTG-P-242: Ravensburger
+                    NTG-P-243: 11.02.2021
+                    NTG-P-244: ''
+                    NTG-P-245: 11.02.2021
+                    NTG-P-246: ''
+                    NTG-P-247: ''
+                    NTG-P-248: ''
+                    NTG-P-249: 0
+                    NTG-P-250: ''
+                    NTG-P-251: ''
+                    NTG-P-252: ''
+                    NTG-P-253: ''
+                    NTG-P-254: ''
+                    NTG-P-255: ''
+                    NTG-P-256: ''
+                    NTG-P-257: ''
+                    NTG-P-258: ''
+                    NTG-P-259: ''
+                    NTG-P-260: ''
+                    NTG-P-261: ''
+                    NTG-P-262: ''
+                    NTG-P-263: ''
+                    NTG-P-264: ''
+                    NTG-P-265: ''
+                    NTG-P-266: ''
+                    NTG-P-267: ''
+                    NTG-P-268: ''
+                    NTG-P-269: J
+                    NTG-P-270: J
+                    NTG-P-271: 'N'
+                    NTG-P-272: ''
+                    attributeToysAndGamesQuantityPuzzlePieces: 0
+                    NTG-P-274: ''
+                    NTG-P-275: ''
+                    NTG-P-276: ''
+                    NTG-P-277: 0
+                    NTG-P-278: 0
+                    NTG-P-279: ''
+                    NTG-P-280: ''
+                    NTG-P-281: ''
+                    NTG-P-282: 0
+                    NTG-P-283: 0
+                    NTG-P-284: 0
+                    NTG-P-285: 0
+                    NTG-P-286: 0
+                    NTG-P-287: 24
+                    NTG-P-288: ''
+                    NTG-P-289: ''
+                    NTG-P-290: 0
+                    NTG-P-291: 0
+                    NTG-P-292: ''
+                    attributeGenericNoticeableFeatures[0]: >-
+                      Das Stickerbuch zum großen Familienfilm mit prominenter
+                      Besetzung
+                    attributeGenericNoticeableFeatures[1]: Mit vielen farbigen Stickern
+                    attributeGenericNoticeableFeatures[2]: Ideal für alle Western-Fans ab 5 Jahren
+                    attributeGenericNoticeableFeatures[3]: ''
+                    attributeGenericNoticeableFeatures[4]: ''
+                    NTG-P-302: ''
+                    NTG-P-303: ''
+                    NTG-P-304: ''
+                    NTG-P-305: ''
+                    NTG-P-306: ''
+                    NTG-P-307: ''
+                    NTG-P-308: ''
+                    NTG-P-309: ''
+                    NTG-P-310: ''
+                    NTG-P-311: ''
+                    NTG-P-312: 101002004013000
+                    NTG-P-313: J
+                    NTG-P-314: ''
+                    NTG-P-315: ''
+                    NTG-P-316: ''
+                    NTG-P-317: ''
+                    NTG-P-318: ''
+                    NTG-P-319: ''
+                    NTG-P-320: ''
+                    NTG-P-321: ''
+                    NTG-P-322: ''
+                    NTG-P-324: ''
+                    NTG-P-325: ''
+                    NTG-P-326: ''
+                    NTG-P-327: ''
+                    NTG-P-328: ''
+                    NTG-P-329: ''
+                    NTG-P-330: ''
+                    NTG-P-331: ''
+                    NTG-P-332: ''
+                    NTG-P-333: 0
+                    NTG-P-334: ''
+                    NTG-P-335: ''
+                    NTG-P-336: ''
+                    NTG-P-337: ''
+                    NTG-P-338: ''
+                    NTG-P-339: ''
+                    NTG-P-340: ''
+                    NTG-P-341: ''
+                    NTG-P-342: https://conformity.ravensburger.ag/files/49682.pdf
+                    NTG-P-343: ''
+                    NTG-P-344: ''
+                    NTG-P-345: ''
+                    NTG-P-346: ''
+                    NTG-P-347: ''
+                    NTG-P-348: ''
+                    NTG-P-349: ''
+                    NTG-P-350: ''
+                    NTG-P-351: ''
+                    NTG-P-352: ''
+                    NTG-P-353: ''
+                    NTG-P-354: 0
+                    NTG-P-355: 0
+                    NTG-P-356: 0
+                    NTG-P-357: 0
+                    NTG-P-358: 0
+                    NTG-P-359: 0
+                    attributeGenericMeasurements.element[0]: Gesamt
+                    attributeGenericMeasurements.element[1]: Gesamt
+                    attributeGenericMeasurements.element[2]: ''
+                    attributeGenericMeasurements.unit[0]: cm
+                    attributeGenericMeasurements.unit[1]: ''
+                    attributeGenericMeasurements.unit[2]: ''
+                    attributeGenericMeasurements.dimension[1]: Breite
+                    attributeGenericMeasurements.dimension[2]: ''
+                    attributeGenericMeasurements.dimension[0]: Länge
+                    attributeGenericVolumeAndWeight.volume.unitVolume: m3
+                    NTG-P-999: Malbücher allgemein
+                    media_list:
+                      - URL: >-
+                          https://gkkntg.de/data/EXPORTMEDIA/Standardsortiment_Ravensburger_4005556000005/9783473496822.jpg
+                        mediaID: '1'
+                        VIEWTYPE: NTG-P-161
+                        contentType: jpg
+                        sourceValidUntil: '2023-02-04T01:00:00.000+01:00'
+                      - URL: >-
+                          https://gkkntg.de/data/EXPORTMEDIA/Standardsortiment_Ravensburger_4005556000005/https://conformity.ravensburger.ag/files/49682.pdf
+                        mediaID: '2'
+                        VIEWTYPE: NTG-P-342
+                        contentType: pdf
+                        sourceValidUntil: '2023-02-04T01:00:00.000+01:00'
+components:
+    schemas:
+      Data:
+        type: object
+        required:
+          - id_product
+          - GLN
+          - NTG-P-002
+          - NTG-P-003
+          - NTG-P-004
+          - NTG-P-005
+          - NTG-P-006
+          - NTG-P-007
+          - NTG-P-008
+          - NTG-P-009
+          - NTG-P-010
+          - NTG-P-011
+          - NTG-P-012
+          - NTG-P-013
+          - NTG-P-014
+          - NTG-P-015
+          - NTG-P-016
+          - NTG-P-017
+          - NTG-P-018
+          - NTG-P-019
+          - NTG-P-020
+          - NTG-P-021
+          - NTG-P-022
+          - NTG-P-023
+          - NTG-P-024
+          - NTG-P-025
+          - NTG-P-026
+          - NTG-P-027
+          - NTG-P-028
+          - NTG-P-029
+          - NTG-P-030
+          - NTG-P-031
+          - NTG-P-032
+          - NTG-P-033
+          - NTG-P-034
+          - NTG-P-035
+          - NTG-P-036
+          - NTG-P-037
+          - NTG-P-038
+          - NTG-P-039
+          - NTG-P-040
+          - NTG-P-041
+          - NTG-P-042
+          - NTG-P-043
+          - NTG-P-044
+          - NTG-P-045
+          - NTG-P-046
+          - NTG-P-047
+          - NTG-P-048
+          - NTG-P-049
+          - NTG-P-050
+          - NTG-P-051
+          - NTG-P-052
+          - NTG-P-053
+          - NTG-P-054
+          - NTG-P-055
+          - NTG-P-056
+          - NTG-P-057
+          - NTG-P-058
+          - NTG-P-059
+          - NTG-P-060
+          - NTG-P-061
+          - NTG-P-062
+          - NTG-P-063
+          - NTG-P-064
+          - NTG-P-065
+          - NTG-P-066
+          - NTG-P-067
+          - NTG-P-068
+          - NTG-P-069
+          - NTG-P-070
+          - NTG-P-071
+          - NTG-P-072
+          - NTG-P-073
+          - NTG-P-074
+          - NTG-P-075
+          - NTG-P-076
+          - NTG-P-077
+          - NTG-P-078
+          - NTG-P-079
+          - NTG-P-080
+          - NTG-P-081
+          - NTG-P-082
+          - NTG-P-083
+          - NTG-P-084
+          - NTG-P-085
+          - NTG-P-086
+          - NTG-P-087
+          - NTG-P-088
+          - NTG-P-089
+          - NTG-P-090
+          - NTG-P-091
+          - NTG-P-092
+          - NTG-P-093
+          - NTG-P-094
+          - NTG-P-095
+          - NTG-P-096
+          - NTG-P-097
+          - NTG-P-098
+          - NTG-P-099
+          - NTG-P-100
+          - NTG-P-101
+          - NTG-P-102
+          - NTG-P-103
+          - NTG-P-104
+          - NTG-P-105
+          - NTG-P-106
+          - NTG-P-107
+          - NTG-P-108
+          - NTG-P-109
+          - NTG-P-110
+          - NTG-P-111
+          - NTG-P-112
+          - NTG-P-113
+          - NTG-P-114
+          - NTG-P-115
+          - NTG-P-116
+          - NTG-P-117
+          - NTG-P-118
+          - NTG-P-119
+          - NTG-P-120
+          - NTG-P-121
+          - NTG-P-122
+          - NTG-P-123
+          - NTG-P-124
+          - NTG-P-125
+          - NTG-P-126
+          - NTG-P-127
+          - NTG-P-128
+          - NTG-P-129
+          - NTG-P-130
+          - NTG-P-131
+          - NTG-P-132
+          - NTG-P-133
+          - NTG-P-134
+          - NTG-P-135
+          - NTG-P-136
+          - NTG-P-137
+          - NTG-P-138
+          - NTG-P-139
+          - NTG-P-140
+          - NTG-P-141
+          - NTG-P-142
+          - NTG-P-143
+          - NTG-P-144
+          - NTG-P-145
+          - NTG-P-146
+          - NTG-P-147
+          - NTG-P-148
+          - NTG-P-149
+          - NTG-P-150
+          - NTG-P-151
+          - NTG-P-152
+          - NTG-P-153
+          - NTG-P-154
+          - NTG-P-155
+          - NTG-P-156
+          - NTG-P-157
+          - NTG-P-158
+          - NTG-P-159
+          - NTG-P-160
+          - NTG-P-161
+          - NTG-P-162
+          - NTG-P-163
+          - NTG-P-164
+          - NTG-P-165
+          - NTG-P-166
+          - NTG-P-167
+          - NTG-P-168
+          - NTG-P-169
+          - NTG-P-170
+          - NTG-P-171
+          - NTG-P-172
+          - NTG-P-173
+          - NTG-P-174
+          - NTG-P-175
+          - NTG-P-176
+          - NTG-P-177
+          - NTG-P-178
+          - NTG-P-179
+          - NTG-P-180
+          - NTG-P-181
+          - NTG-P-182
+          - NTG-P-183
+          - NTG-P-184
+          - NTG-P-185
+          - NTG-P-186
+          - NTG-P-187
+          - NTG-P-188
+          - NTG-P-189
+          - NTG-P-190
+          - NTG-P-191
+          - NTG-P-192
+          - NTG-P-193
+          - NTG-P-194
+          - NTG-P-195
+          - NTG-P-196
+          - NTG-P-197
+          - NTG-P-198
+          - NTG-P-199
+          - NTG-P-200
+          - NTG-P-201
+          - NTG-P-202
+          - NTG-P-203
+          - NTG-P-204
+          - NTG-P-205
+          - NTG-P-206
+          - NTG-P-207
+          - NTG-P-208
+          - NTG-P-209
+          - NTG-P-210
+          - NTG-P-211
+          - NTG-P-212
+          - NTG-P-213
+          - NTG-P-214
+          - NTG-P-215
+          - NTG-P-216
+          - NTG-P-217
+          - NTG-P-218
+          - NTG-P-219
+          - NTG-P-220
+          - NTG-P-221
+          - NTG-P-222
+          - NTG-P-223
+          - NTG-P-224
+          - NTG-P-225
+          - NTG-P-226
+          - NTG-P-227
+          - NTG-P-228
+          - NTG-P-229
+          - NTG-P-230
+          - NTG-P-231
+          - NTG-P-232
+          - NTG-P-233
+          - NTG-P-234
+          - NTG-P-235
+          - NTG-P-236
+          - NTG-P-237
+          - NTG-P-238
+          - NTG-P-239
+          - NTG-P-240
+          - NTG-P-241
+          - NTG-P-242
+          - NTG-P-243
+          - NTG-P-244
+          - NTG-P-245
+          - NTG-P-246
+          - NTG-P-247
+          - NTG-P-248
+          - NTG-P-249
+          - NTG-P-250
+          - NTG-P-251
+          - NTG-P-252
+          - NTG-P-253
+          - NTG-P-254
+          - NTG-P-255
+          - NTG-P-256
+          - NTG-P-257
+          - NTG-P-258
+          - NTG-P-259
+          - NTG-P-260
+          - NTG-P-261
+          - NTG-P-262
+          - NTG-P-263
+          - NTG-P-264
+          - NTG-P-265
+          - NTG-P-266
+          - NTG-P-267
+          - NTG-P-268
+          - NTG-P-269
+          - NTG-P-270
+          - NTG-P-271
+          - NTG-P-272
+          - NTG-P-273
+          - NTG-P-274
+          - NTG-P-275
+          - NTG-P-276
+          - NTG-P-277
+          - NTG-P-278
+          - NTG-P-279
+          - NTG-P-280
+          - NTG-P-281
+          - NTG-P-282
+          - NTG-P-283
+          - NTG-P-284
+          - NTG-P-285
+          - NTG-P-286
+          - NTG-P-287
+          - NTG-P-288
+          - NTG-P-289
+          - NTG-P-290
+          - NTG-P-291
+          - NTG-P-292
+          - NTG-P-293
+          - NTG-P-294
+          - NTG-P-295
+          - NTG-P-296
+          - NTG-P-297
+          - NTG-P-298
+          - NTG-P-299
+          - NTG-P-300
+          - NTG-P-301
+          - NTG-P-302
+          - NTG-P-303
+          - NTG-P-304
+          - NTG-P-305
+          - NTG-P-306
+          - NTG-P-307
+          - NTG-P-308
+          - NTG-P-309
+          - NTG-P-310
+          - NTG-P-311
+          - NTG-P-312
+          - NTG-P-313
+          - NTG-P-314
+          - NTG-P-315
+          - NTG-P-316
+          - NTG-P-317
+          - NTG-P-318
+          - NTG-P-319
+          - NTG-P-320
+          - NTG-P-321
+          - NTG-P-322
+          - NTG-P-323
+          - NTG-P-324
+          - NTG-P-325
+          - NTG-P-326
+          - NTG-P-327
+          - NTG-P-328
+          - NTG-P-329
+          - NTG-P-330
+          - NTG-P-331
+          - NTG-P-332
+          - NTG-P-333
+          - NTG-P-334
+          - NTG-P-335
+          - NTG-P-336
+          - NTG-P-337
+          - NTG-P-338
+          - NTG-P-339
+          - NTG-P-340
+          - NTG-P-341
+          - NTG-P-342
+          - NTG-P-343
+          - NTG-P-344
+          - NTG-P-345
+          - NTG-P-346
+          - NTG-P-347
+          - NTG-P-348
+          - NTG-P-349
+          - NTG-P-350
+          - NTG-P-351
+          - NTG-P-352
+          - NTG-P-353
+          - NTG-P-354
+          - NTG-P-355
+          - NTG-P-356
+          - NTG-P-357
+          - NTG-P-358
+          - NTG-P-359
+          - NTG-P-360
+          - NTG-P-361
+          - NTG-P-362
+          - NTG-P-363
+          - NTG-P-364
+          - NTG-P-365
+          - NTG-P-366
+          - NTG-P-367
+          - NTG-P-368
+          - NTG-P-369
+          - NTG-P-370
+          - NTG-P-371
+          - NTG-P-372
+          - NTG-P-373
+          - NTG-P-374
+          - NTG-P-375
+          - NTG-P-376
+          - NTG-P-377
+          - NTG-P-378
+          - NTG-P-379
+          - NTG-P-380
+          - NTG-P-381
+          - NTG-P-382
+          - NTG-P-383
+          - NTG-P-384
+          - NTG-P-385
+          - NTG-P-386
+          - NTG-P-387
+          - NTG-P-388
+          - NTG-P-389
+          - NTG-P-390
+          - NTG-P-391
+          - NTG-P-392
+          - NTG-P-393
+          - NTG-P-394
+          - NTG-P-395
+          - NTG-P-396
+          - NTG-P-397
+          - NTG-P-398
+          - NTG-P-399
+        properties:
+          id_product:
+            type: string
+            example: "7724"
+          GLN:
+            type: number
+            example: 4005556000005
+          NTG-P-002:
+            type: string
+            example: "Ravensburger Verlag GmbH"
+            description: something
+          NTG-P-003:
+            type: integer
+            example: 4005556000005
+            description: something
+          NTG-P-004:
+            type: string
+            example: "Ravensburger Verlag GmbH"
+            description: something
+          NTG-P-005:
+            type: string
+            example: 
+            description: something
+          NTG-P-006:
+            type: integer
+            example: something
+            description: something
+          gtin:
+            type: number
+            example: 9783473496822
+            description: something
+          NTG-P-008:
+            type: string
+            example: 
+            description: something
+          NTG-P-009:
+            type: integer
+            example: 1
+            description: something
+          attributeGenericBrand:
+            type: string
+            example: "Ravensburger"
+            description: something
+          NTG-P-011:
+            type: integer
+            example: 1
+            description: something
+          NTG-P-012:
+            type: integer
+            example: 1
+            description: something
+          NTG-P-013:
+            type: string
+            example: "49682"
+            description: something
+          attributeGenericManufacturerArticleNumber:
+            type: string
+            example: "49682"
+            description: something
+          attributeGenericArticleTitle:
+            type: string
+            example: "Der junge Häuptling Winnetou: Stickerbuch zum Film"
+            description: something
+          attributeGenericSortedItem:
+            type: string
+            example: "false"
+            description: something
+          NTG-P-017:
+            type: string
+            example: "073"
+            description: something
+          NTG-P-018:
+            type: string
+            example: "J"
+            description: something
+          NTG-P-019:
+            type: string
+            example: 
+            description: something
+          NTG-P-020:
+            type: integer
+            example: 10000926
+            description: something
+          NTG-P-021:
+            type: integer
+            example: 0
+            description: something
+          NTG-P-022:
+            type: integer
+            example: 0
+            description: something
+          NTG-P-023:
+            type: integer
+            example: 0
+            description: something
+          NTG-P-024:
+            type: string
+            example: 
+            description: something
+          NTG-P-025:
+            type: string
+            example: something
+            description: something
+          NTG-P-026:
+            type: string
+            example: something
+            description: something
+          NTG-P-027:
+            type: string
+            example: something
+            description: something
+          attributeGenericNumberOfItemsInMultipacks:
+            type: integer
+            example: 0
+            description: something
+          NTG-P-029:
+            type: string
+            example: 
+            description: something
+          NTG-P-030:
+            type: integer
+            example: 0
+            description: something
+          attributeGenericMeasurements.value[0]:
+            type: integer
+            example: 30
+            description: something
+          attributeGenericMeasurements.value[1]:
+            type: integer
+            example: 23.6
+            description: something
+          attributeGenericMeasurements.value[2]:
+            type: integer
+            example: 0
+            description: something
+          attributeGenericVolumeAndWeight.weight.valueWeight:
+            type: integer
+            example: 0.209
+            description: something
+          attributeGenericVolumeAndWeight.weight.unitWeight:
+            type: string
+            example: "kg"
+            description: something
+          attributeGenericVolumeAndWeight.weight.valueVolume:
+            type: integer
+            example: something
+            description: something
+          NTG-P-037:
+            type: string
+            example: something
+            description: something
+          NTG-P-038:
+            type: string
+            example: something
+            description: something
+          NTG-P-039:
+            type: string
+            example: something
+            description: something
+          NTG-P-040:
+            type: string
+            example: something
+            description: something
+          NTG-P-041:
+            type: string
+            example: something
+            description: something
+          NTG-P-042:
+            type: string
+            example: something
+            description: something
+          NTG-P-043:
+            type: string
+            example: something
+            description: something
+          NTG-P-044:
+            type: string
+            example: something
+            description: something
+          NTG-P-045:
+            type: string
+            example: something
+            description: something
+          NTG-P-046:
+            type: string
+            example: something
+            description: something
+          NTG-P-047:
+            type: string
+            example: something
+            description: something
+          NTG-P-048:
+            type: string
+            example: something
+            description: something
+          NTG-P-049:
+            type: string
+            example: something
+            description: something
+          NTG-P-050:
+            type: string
+            example: something
+            description: something
+          NTG-P-051:
+            type: string
+            example: something
+            description: something
+          NTG-P-052:
+            type: string
+            example: something
+            description: something
+          NTG-P-053:
+            type: string
+            example: something
+            description: something
+          NTG-P-054:
+            type: string
+            example: something
+            description: something
+          NTG-P-055:
+            type: string
+            example: something
+            description: something
+          NTG-P-056:
+            type: string
+            example: something
+            description: something
+          NTG-P-057:
+            type: string
+            example: something
+            description: something
+          NTG-P-058:
+            type: string
+            example: something
+            description: something
+          NTG-P-059:
+            type: string
+            example: something
+            description: something
+          NTG-P-060:
+            type: string
+            example: something
+            description: something
+          NTG-P-061:
+            type: string
+            example: something
+            description: something
+          NTG-P-062:
+            type: string
+            example: something
+            description: something
+          attributeGenericPackageContents:
+            type: integer
+            example: 0
+            description: something
+          NTG-P-064:
+            type: string
+            example: something
+            description: something
+          NTG-P-065:
+            type: string
+            example: something
+            description: something
+          NTG-P-066:
+            type: string
+            example: something
+            description: something
+          NTG-P-067:
+            type: string
+            example: something
+            description: something
+          NTG-P-068:
+            type: string
+            example: something
+            description: something
+          NTG-P-069:
+            type: string
+            example: something
+            description: something
+          NTG-P-070:
+            type: string
+            example: something
+            description: something
+          NTG-P-071:
+            type: string
+            example: something
+            description: something
+          NTG-P-072:
+            type: string
+            example: something
+            description: something
+          NTG-P-073:
+            type: string
+            example: something
+            description: something
+          NTG-P-074:
+            type: string
+            example: something
+            description: something
+          NTG-P-075:
+            type: string
+            example: something
+            description: something
+          NTG-P-076:
+            type: string
+            example: something
+            description: something
+          NTG-P-077:
+            type: string
+            example: something
+            description: something
+          NTG-P-078:
+            type: string
+            example: something
+            description: something
+          attributeGenericTargetGroup.age.fromValue:
+            type: integer
+            example: 5
+            description: something
+          attributeGenericTargetGroup.age.toValue:
+            type: integer
+            example: 8
+            description: something
+          NTG-P-081:
+            type: string
+            example: something
+            description: something
+          attributeToysAndGamesMaxQuantityPlayers:
+            type: integer
+            example: 0
+            description: something
+          attributeGenericPlayingTime:
+            type: string
+            example: 
+            description: something
+          NTG-P-084:
+            type: string
+            example: something
+            description: something
+          NTG-P-085:
+            type: string
+            example: something
+            description: something
+          NTG-P-086:
+            type: string
+            example: something
+            description: something
+          attributeGenericScale:
+            type: string
+            example: something
+            description: something
+          attributeGenericColor[0]:
+            type: string
+            example: something
+            description: something
+          NTG-P-089:
+            type: string
+            example: something
+            description: something
+          NTG-P-090:
+            type: string
+            example: something
+            description: something
+          NTG-P-091:
+            type: string
+            example: something
+            description: something
+          NTG-P-092:
+            type: string
+            example: something
+            description: something
+          NTG-P-093:
+            type: string
+            example: something
+            description: something
+          NTG-P-094:
+            type: string
+            example: something
+            description: something
+          NTG-P-095:
+            type: string
+            example: something
+            description: something
+          NTG-P-096:
+            type: string
+            example: something
+            description: something
+          NTG-P-097:
+            type: string
+            example: something
+            description: something
+          NTG-P-098:
+            type: string
+            example: something
+            description: something
+          attributeToysAndGamesMaterialToys:
+            type: string
+            example: 
+            description: something
+          NTG-P-100:
+            type: string
+            example: 
+            description: something
+          attributeGenericSeries:
+            type: string
+            example: Bücher
+            description: something
+          NTG-P-102:
+            type: string
+            example: something
+            description: something
+          NTG-P-103:
+            type: string
+            example: something
+            description: something
+          NTG-P-104:
+            type: string
+            example: something
+            description: something
+          attributeGenericBatteryIncluded:
+            type: string
+            example: "false"
+            description: something
+          NTG-P-106:
+            type: string
+            example: something
+            description: something
+          NTG-P-107:
+            type: string
+            example: something
+            description: something
+          NTG-P-108:
+            type: string
+            example: something
+            description: something
+          NTG-P-109:
+            type: string
+            example: something
+            description: something
+          NTG-P-110:
+            type: string
+            example: something
+            description: something
+          NTG-P-111:
+            type: string
+            example: something
+            description: something
+          NTG-P-112:
+            type: string
+            example: something
+            description: something
+          NTG-P-113:
+            type: string
+            example: something
+            description: something
+          NTG-P-114:
+            type: string
+            example: something
+            description: something
+          NTG-P-115:
+            type: string
+            example: something
+            description: something
+          NTG-P-116:
+            type: string
+            example: something
+            description: something
+          NTG-P-117:
+            type: string
+            example: something
+            description: something
+          NTG-P-118:
+            type: string
+            example: something
+            description: something
+          NTG-P-119:
+            type: string
+            example: something
+            description: something
+          NTG-P-120:
+            type: string
+            example: something
+            description: something
+          NTG-P-121:
+            type: string
+            example: something
+            description: something
+          NTG-P-122:
+            type: string
+            example: something
+            description: something
+          NTG-P-123:
+            type: string
+            example: something
+            description: something
+          NTG-P-124:
+            type: string
+            example: something
+            description: something
+          NTG-P-125:
+            type: string
+            example: something
+            description: something
+          NTG-P-126:
+            type: string
+            example: something
+            description: something
+          NTG-P-127:
+            type: string
+            example: something
+            description: something
+          NTG-P-128:
+            type: string
+            example: something
+            description: something
+          NTG-P-129:
+            type: string
+            example: something
+            description: something
+          NTG-P-130:
+            type: string
+            example: something
+            description: something
+          NTG-P-131:
+            type: string
+            example: something
+            description: something
+          NTG-P-132:
+            type: string
+            example: something
+            description: something
+          NTG-P-133:
+            type: string
+            example: something
+            description: something
+          NTG-P-134:
+            type: string
+            example: something
+            description: something
+          NTG-P-135:
+            type: string
+            example: something
+            description: something
+          attributeGenericSafetyNoteToys:
+            type: string
+            example: "Warnhinweis nach Spielzeug-VO nicht erforderlich."
+            description: something
+          NTG-P-137:
+            type: string
+            example: something
+            description: something
+          attributeYflattenedAttributeGenericCareLabelTextileWashingSplit:
+            type: string
+            example: 
+            description: something
+          NTG-P-139:
+            type: string
+            example: something
+            description: something
+          NTG-P-140:
+            type: string
+            example: something
+            description: something
+          NTG-P-141:
+            type: string
+            example: something
+            description: something
+          NTG-P-142:
+            type: string
+            example: something
+            description: something
+          NTG-P-143:
+            type: string
+            example: something
+            description: something
+          NTG-P-144:
+            type: string
+            example: something
+            description: something
+          NTG-P-145:
+            type: string
+            example: something
+            description: something
+          NTG-P-146:
+            type: string
+            example: something
+            description: something
+          NTG-P-147:
+            type: string
+            example: something
+            description: something
+          NTG-P-148:
+            type: string
+            example: something
+            description: something
+          NTG-P-149:
+            type: string
+            example: something
+            description: something
+          NTG-P-150:
+            type: string
+            example: something
+            description: something
+          NTG-P-151:
+            type: string
+            example: something
+            description: something
+          NTG-P-152:
+            type: string
+            example: something
+            description: something
+          NTG-P-153:
+            type: string
+            example: something
+            description: something
+          NTG-P-154:
+            type: string
+            example: "junge Häuptling Winnetou: Stickerbu"
+            description: something
+          NTG-P-155:
+            type: string
+            example: something
+            description: something
+          attributeGenericArticleDescription:
+            type: string
+            example: "Erlebe die Abenteuer des kleinen Häuptlings!In diesem Stickerheft zum neuen Kinofilm erfährt der Leser alles über die Abenteuer des jungen Häuptling Winnetou und seinen Freunden. Mit vielen wunderbaren Bildern aus dem Film können junge Western-Fans in die Welt von Winnetou und seinen Freunden eintauchen und mit farbigen Stickern selbst weiter gestalten und verschönern. Das perfekte Geschenk für alle Winnetou-Fans.Winnetous Stamm ist in Not geraten. Als Sohn des Häuptlings muss der Junge beweisen, wie mutig er ist. Um seinen Stamm zu retten, stellt Winnetou sich einem gefährlichen Abenteuer. Dabei bekommt er Unterstützung von seiner jüngeren Schwester, aber auch der Stadtjunge Tom eilt zur Hilfe. Eine moderne Western-Geschichte, die sowohl Karl May-Kenner als auch jüngere Fans begeistert."
+            description: something
+          NTG-P-157:
+            type: string
+            example: something
+            description: something
+          NTG-P-158:
+            type: string
+            example: something
+            description: something
+          NTG-P-159:
+            type: string
+            example: something
+            description: something
+          NTG-P-160:
+            type: string
+            example: something
+            description: something
+          NTG-P-161:
+            type: string
+            example: something
+            description: something
+          NTG-P-162:
+            type: string
+            example: something
+            description: something
+          NTG-P-163:
+            type: string
+            example: something
+            description: something
+          NTG-P-164:
+            type: string
+            example: something
+            description: something
+          NTG-P-165:
+            type: string
+            example: something
+            description: something
+          NTG-P-166:
+            type: string
+            example: something
+            description: something
+          NTG-P-167:
+            type: string
+            example: something
+            description: something
+          NTG-P-168:
+            type: string
+            example: something
+            description: something
+          NTG-P-169:
+            type: string
+            example: something
+            description: something
+          NTG-P-170:
+            type: string
+            example: something
+            description: something
+          NTG-P-171:
+            type: string
+            example: something
+            description: something
+          NTG-P-172:
+            type: string
+            example: something
+            description: something
+          NTG-P-173:
+            type: string
+            example: something
+            description: something
+          NTG-P-174:
+            type: string
+            example: something
+            description: something
+          NTG-P-175:
+            type: string
+            example: something
+            description: something
+          NTG-P-176:
+            type: string
+            example: something
+            description: something
+          NTG-P-177:
+            type: string
+            example: something
+            description: something
+          NTG-P-178:
+            type: string
+            example: something
+            description: something
+          NTG-P-179:
+            type: string
+            example: something
+            description: something
+          NTG-P-180:
+            type: string
+            example: something
+            description: something
+          NTG-P-181:
+            type: string
+            example: something
+            description: something
+          NTG-P-182:
+            type: string
+            example: something
+            description: something
+          NTG-P-183:
+            type: string
+            example: something
+            description: something
+          NTG-P-184:
+            type: string
+            example: something
+            description: something
+          NTG-P-185:
+            type: string
+            example: something
+            description: something
+          NTG-P-186:
+            type: string
+            example: something
+            description: something
+          NTG-P-187:
+            type: string
+            example: something
+            description: something
+          NTG-P-188:
+            type: string
+            example: something
+            description: something
+          NTG-P-189:
+            type: string
+            example: something
+            description: something
+          NTG-P-190:
+            type: string
+            example: something
+            description: something
+          NTG-P-191:
+            type: string
+            example: something
+            description: something
+          attributeGenericTargetGroup.age.fromUnit:
+            type: string
+            example: "YEAR"
+            description: something
+          attributeGenericTargetGroup.age.toUnit:
+            type: string
+            example: "YEAR"
+            description: something
+          NTG-P-194:
+            type: string
+            example: something
+            description: something
+          NTG-P-195:
+            type: string
+            example: something
+            description: something
+          NTG-P-196:
+            type: string
+            example: something
+            description: something
+          NTG-P-197:
+            type: string
+            example: something
+            description: something
+          NTG-P-198:
+            type: string
+            example: something
+            description: something
+          NTG-P-199:
+            type: string
+            example: something
+            description: something
+          NTG-P-200:
+            type: string
+            example: something
+            description: something
+          NTG-P-201:
+            type: string
+            example: something
+            description: something
+          NTG-P-202:
+            type: string
+            example: something
+            description: something
+          NTG-P-203:
+            type: string
+            example: something
+            description: something
+          attributeGenericLoadingCapacity:
+            type: integer
+            example: 0
+            description: something
+          NTG-P-205:
+            type: string
+            example: something
+            description: something
+          NTG-P-206:
+            type: string
+            example: something
+            description: something
+          NTG-P-207:
+            type: string
+            example: something
+            description: something
+          NTG-P-208:
+            type: string
+            example: something
+            description: something
+          NTG-P-209:
+            type: string
+            example: something
+            description: something
+          NTG-P-210:
+            type: string
+            example: something
+            description: something
+          NTG-P-211:
+            type: string
+            example: something
+            description: something
+          NTG-P-212:
+            type: string
+            example: something
+            description: something
+          NTG-P-213:
+            type: string
+            example: something
+            description: something
+          NTG-P-214:
+            type: string
+            example: something
+            description: something
+          NTG-P-215:
+            type: string
+            example: something
+            description: something
+          NTG-P-216:
+            type: string
+            example: something
+            description: something
+          NTG-P-217:
+            type: string
+            example: something
+            description: something
+          NTG-P-218:
+            type: string
+            example: something
+            description: something
+          NTG-P-219:
+            type: string
+            example: something
+            description: something
+          NTG-P-220:
+            type: string
+            example: something
+            description: something
+          NTG-P-221:
+            type: string
+            example: something
+            description: something
+          NTG-P-222:
+            type: string
+            example: something
+            description: something
+          NTG-P-223:
+            type: string
+            example: something
+            description: something
+          NTG-P-224:
+            type: string
+            example: something
+            description: something
+          NTG-P-225:
+            type: string
+            example: something
+            description: something
+          NTG-P-226:
+            type: string
+            example: something
+            description: something
+          NTG-P-227:
+            type: string
+            example: something
+            description: something
+          NTG-P-228:
+            type: string
+            example: something
+            description: something
+          NTG-P-229:
+            type: string
+            example: something
+            description: something
+          NTG-P-230:
+            type: string
+            example: something
+            description: something
+          NTG-P-231:
+            type: string
+            example: something
+            description: something
+          NTG-P-232:
+            type: string
+            example: something
+            description: something
+          NTG-P-233:
+            type: string
+            example: something
+            description: something
+          NTG-P-234:
+            type: string
+            example: something
+            description: something
+          NTG-P-235:
+            type: string
+            example: something
+            description: something
+          NTG-P-236:
+            type: string
+            example: something
+            description: something
+          NTG-P-237:
+            type: string
+            example: something
+            description: something
+          NTG-P-238:
+            type: string
+            example: something
+            description: something
+          NTG-P-239:
+            type: string
+            example: something
+            description: something
+          NTG-P-240:
+            type: string
+            example: something
+            description: something
+          NTG-P-241:
+            type: string
+            example: something
+            description: something
+          NTG-P-242:
+            type: string
+            example: something
+            description: something
+          NTG-P-243:
+            type: string
+            example: something
+            description: something
+          NTG-P-244:
+            type: string
+            example: something
+            description: something
+          NTG-P-245:
+            type: string
+            example: something
+            description: something
+          NTG-P-246:
+            type: string
+            example: something
+            description: something
+          NTG-P-247:
+            type: string
+            example: something
+            description: something
+          NTG-P-248:
+            type: string
+            example: something
+            description: something
+          NTG-P-249:
+            type: string
+            example: something
+            description: something
+          NTG-P-250:
+            type: string
+            example: something
+            description: something
+          NTG-P-251:
+            type: string
+            example: something
+            description: something
+          NTG-P-252:
+            type: string
+            example: something
+            description: something
+          NTG-P-253:
+            type: string
+            example: something
+            description: something
+          NTG-P-254:
+            type: string
+            example: something
+            description: something
+          NTG-P-255:
+            type: string
+            example: something
+            description: something
+          NTG-P-256:
+            type: string
+            example: something
+            description: something
+          NTG-P-257:
+            type: string
+            example: something
+            description: something
+          NTG-P-258:
+            type: string
+            example: something
+            description: something
+          NTG-P-259:
+            type: string
+            example: something
+            description: something
+          NTG-P-260:
+            type: string
+            example: something
+            description: something
+          NTG-P-261:
+            type: string
+            example: something
+            description: something
+          NTG-P-262:
+            type: string
+            example: something
+            description: something
+          NTG-P-263:
+            type: string
+            example: something
+            description: something
+          NTG-P-264:
+            type: string
+            example: something
+            description: something
+          NTG-P-265:
+            type: string
+            example: something
+            description: something
+          NTG-P-266:
+            type: string
+            example: something
+            description: something
+          NTG-P-267:
+            type: string
+            example: something
+            description: something
+          NTG-P-268:
+            type: string
+            example: something
+            description: something
+          NTG-P-269:
+            type: string
+            example: something
+            description: something
+          NTG-P-270:
+            type: string
+            example: something
+            description: something
+          NTG-P-271:
+            type: string
+            example: something
+            description: something
+          NTG-P-272:
+            type: string
+            example: something
+            description: something
+          attributeToysAndGamesQuantityPuzzlePieces:
+            type: integer
+            example: 0
+            description: something
+          NTG-P-274:
+            type: string
+            example: something
+            description: something
+          NTG-P-275:
+            type: string
+            example: something
+            description: something
+          NTG-P-276:
+            type: string
+            example: something
+            description: something
+          NTG-P-277:
+            type: string
+            example: something
+            description: something
+          NTG-P-278:
+            type: string
+            example: something
+            description: something
+          NTG-P-279:
+            type: string
+            example: something
+            description: something
+          NTG-P-280:
+            type: string
+            example: something
+            description: something
+          NTG-P-281:
+            type: string
+            example: something
+            description: something
+          NTG-P-282:
+            type: string
+            example: something
+            description: something
+          NTG-P-283:
+            type: string
+            example: something
+            description: something
+          NTG-P-284:
+            type: string
+            example: something
+            description: something
+          NTG-P-285:
+            type: string
+            example: something
+            description: something
+          NTG-P-286:
+            type: string
+            example: something
+            description: something
+          NTG-P-287:
+            type: string
+            example: something
+            description: something
+          NTG-P-288:
+            type: string
+            example: something
+            description: something
+          NTG-P-289:
+            type: string
+            example: something
+            description: something
+          NTG-P-290:
+            type: string
+            example: something
+            description: something
+          NTG-P-291:
+            type: string
+            example: something
+            description: something
+          NTG-P-292:
+            type: string
+            example: something
+            description: something
+          attributeGenericNoticeableFeatures[0]:
+            type: string
+            example: "Das Stickerbuch zum großen Familienfilm mit prominenter Besetzung"
+            description: something
+          attributeGenericNoticeableFeatures[1]:
+            type: string
+            example: "Mit vielen farbigen Stickern"
+            description: something
+          attributeGenericNoticeableFeatures[2]:
+            type: string
+            example: "Ideal für alle Western-Fans ab 5 Jahren"
+            description: something
+          attributeGenericNoticeableFeatures[3]:
+            type: string
+            example: 
+            description: something
+          attributeGenericNoticeableFeatures[4]:
+            type: string
+            example: 
+            description: something
+          NTG-P-298:
+            type: string
+            example: something
+            description: something
+          NTG-P-299:
+            type: string
+            example: something
+            description: something
+          NTG-P-300:
+            type: string
+            example: something
+            description: something
+          NTG-P-301:
+            type: string
+            example: something
+            description: something
+          NTG-P-302:
+            type: string
+            example: something
+            description: something
+          NTG-P-303:
+            type: string
+            example: something
+            description: something
+          NTG-P-304:
+            type: string
+            example: something
+            description: something
+          NTG-P-305:
+            type: string
+            example: something
+            description: something
+          NTG-P-306:
+            type: string
+            example: something
+            description: something
+          NTG-P-307:
+            type: string
+            example: something
+            description: something
+          NTG-P-308:
+            type: string
+            example: something
+            description: something
+          NTG-P-309:
+            type: string
+            example: something
+            description: something
+          NTG-P-310:
+            type: string
+            example: something
+            description: something
+          NTG-P-311:
+            type: string
+            example: something
+            description: something
+          NTG-P-312:
+            type: string
+            example: something
+            description: something
+          NTG-P-313:
+            type: string
+            example: something
+            description: something
+          NTG-P-314:
+            type: string
+            example: something
+            description: something
+          NTG-P-315:
+            type: string
+            example: something
+            description: something
+          NTG-P-316:
+            type: string
+            example: something
+            description: something
+          NTG-P-317:
+            type: string
+            example: something
+            description: something
+          NTG-P-318:
+            type: string
+            example: something
+            description: something
+          NTG-P-319:
+            type: string
+            example: something
+            description: something
+          NTG-P-320:
+            type: string
+            example: something
+            description: something
+          NTG-P-321:
+            type: string
+            example: something
+            description: something
+          NTG-P-322:
+            type: string
+            example: something
+            description: something
+          NTG-P-323:
+            type: string
+            example: something
+            description: something
+          NTG-P-324:
+            type: string
+            example: something
+            description: something
+          NTG-P-325:
+            type: string
+            example: something
+            description: something
+          NTG-P-326:
+            type: string
+            example: something
+            description: something
+          NTG-P-327:
+            type: string
+            example: something
+            description: something
+          NTG-P-328:
+            type: string
+            example: something
+            description: something
+          NTG-P-329:
+            type: string
+            example: something
+            description: something
+          NTG-P-330:
+            type: string
+            example: something
+            description: something
+          NTG-P-331:
+            type: string
+            example: something
+            description: something
+          NTG-P-332:
+            type: string
+            example: something
+            description: something
+          NTG-P-333:
+            type: string
+            example: something
+            description: something
+          NTG-P-334:
+            type: string
+            example: something
+            description: something
+          NTG-P-335:
+            type: string
+            example: something
+            description: something
+          NTG-P-336:
+            type: string
+            example: something
+            description: something
+          NTG-P-337:
+            type: string
+            example: something
+            description: something
+          NTG-P-338:
+            type: string
+            example: something
+            description: something
+          NTG-P-339:
+            type: string
+            example: something
+            description: something
+          NTG-P-340:
+            type: string
+            example: something
+            description: something
+          NTG-P-341:
+            type: string
+            example: something
+            description: something
+          NTG-P-342:
+            type: string
+            example: something
+            description: something
+          NTG-P-343:
+            type: string
+            example: something
+            description: something
+          NTG-P-344:
+            type: string
+            example: something
+            description: something
+          NTG-P-345:
+            type: string
+            example: something
+            description: something
+          NTG-P-346:
+            type: string
+            example: something
+            description: something
+          NTG-P-347:
+            type: string
+            example: something
+            description: something
+          NTG-P-348:
+            type: string
+            example: something
+            description: something
+          NTG-P-349:
+            type: string
+            example: something
+            description: something
+          NTG-P-350:
+            type: string
+            example: something
+            description: something
+          NTG-P-351:
+            type: string
+            example: something
+            description: something
+          NTG-P-352:
+            type: string
+            example: something
+            description: something
+          NTG-P-353:
+            type: string
+            example: something
+            description: something
+          NTG-P-354:
+            type: string
+            example: something
+            description: something
+          NTG-P-355:
+            type: string
+            example: something
+            description: something
+          NTG-P-356:
+            type: string
+            example: something
+            description: something
+          NTG-P-357:
+            type: string
+            example: something
+            description: something
+          NTG-P-358:
+            type: string
+            example: something
+            description: something
+          NTG-P-359:
+            type: string
+            example: something
+            description: something
+          NTG-P-360:
+            type: string
+            example: something
+            description: something
+          NTG-P-361:
+            type: string
+            example: something
+            description: something
+          NTG-P-362:
+            type: string
+            example: something
+            description: something
+          NTG-P-363:
+            type: string
+            example: something
+            description: something
+          NTG-P-364:
+            type: string
+            example: something
+            description: something
+          NTG-P-365:
+            type: string
+            example: something
+            description: something
+          NTG-P-366:
+            type: string
+            example: something
+            description: something
+          NTG-P-367:
+            type: string
+            example: something
+            description: something
+          NTG-P-368:
+            type: string
+            example: something
+            description: something
+          NTG-P-369:
+            type: string
+            example: something
+            description: something
+          NTG-P-370:
+            type: string
+            example: something
+            description: something
+          NTG-P-371:
+            type: string
+            example: something
+            description: something
+          NTG-P-372:
+            type: string
+            example: something
+            description: something
+          NTG-P-373:
+            type: string
+            example: something
+            description: something
+          NTG-P-374:
+            type: string
+            example: something
+            description: something
+          NTG-P-375:
+            type: string
+            example: something
+            description: something
+          NTG-P-376:
+            type: string
+            example: something
+            description: something
+          NTG-P-377:
+            type: string
+            example: something
+            description: something
+          NTG-P-378:
+            type: string
+            example: something
+            description: something
+          NTG-P-379:
+            type: string
+            example: something
+            description: something
+          NTG-P-380:
+            type: string
+            example: something
+            description: something
+          NTG-P-381:
+            type: string
+            example: something
+            description: something
+          NTG-P-382:
+            type: string
+            example: something
+            description: something
+          NTG-P-383:
+            type: string
+            example: something
+            description: something
+          NTG-P-384:
+            type: string
+            example: something
+            description: something
+          NTG-P-385:
+            type: string
+            example: something
+            description: something
+          NTG-P-386:
+            type: string
+            example: something
+            description: something
+          NTG-P-387:
+            type: string
+            example: something
+            description: something
+          NTG-P-388:
+            type: string
+            example: something
+            description: something
+          NTG-P-389:
+            type: string
+            example: something
+            description: something
+          NTG-P-390:
+            type: string
+            example: something
+            description: something
+          NTG-P-391:
+            type: string
+            example: something
+            description: something
+          NTG-P-392:
+            type: string
+            example: something
+            description: something
+          NTG-P-393:
+            type: string
+            example: something
+            description: something
+          NTG-P-394:
+            type: string
+            example: something
+            description: something
+          NTG-P-395:
+            type: string
+            example: something
+            description: something
+          NTG-P-396:
+            type: string
+            example: something
+            description: something
+          NTG-P-397:
+            type: string
+            example: something
+            description: something
+          NTG-P-398:
+            type: string
+            example: something
+            description: something
+          NTG-P-399:
+            type: string
+            example: something
+            description: something
+          attributeGenericMeasurements.element[0]:
+            type: string
+            example: something
+            description: something
+          attributeGenericMeasurements.element[1]:
+            type: string
+            example: something
+            description: something
+          attributeGenericMeasurements.element[2]:
+            type: string
+            example: something
+            description: something
+          attributeGenericMeasurements.unit[0]:
+            type: string
+            example: something
+            description: something
+          attributeGenericMeasurements.unit[1]:
+            type: string
+            example: something
+            description: something
+          attributeGenericMeasurements.unit[2]:
+            type: string
+            example: something
+            description: something
+          attributeGenericMeasurements.dimension[0]:
+            type: string
+            example: something
+            description: something
+          attributeGenericMeasurements.dimension[1]:
+            type: string
+            example: something
+            description: something
+          attributeGenericMeasurements.dimension[2]:
+            type: string
+            example: something
+            description: something
+          attributeGenericVolumeAndWeight.volume.unitVolume:
+            type: string
+            example: "m3"
+            description: something
+          media_list:
+            type: array
+            items:
+              $ref: '#/components/schemas/Media'
+    
+    
+      Media:
+        type: object
+        required:
+          - URL
+          - mediaID
+          - VIETTYPE
+          - contentType
+          - sourceValidUntil
+        properties:
+          URL:
+            type: string
+            example: "https://gkkntg.de/data/EXPORTMEDIA/Standardsortiment_Ravensburger_4005556000005/9783473496822.jpg"
+          mediaID:
+            type: string
+            example: "1"
+          VIEWTYPE:
+            type: string
+            example: "NTG-P-161"
+            description: something
+          contentType:
+            type: string
+            example: "jpg"
+            description: something
+          sourceValidUntil:
+            type: string
+            format: date
+            example: "2023-02-04T01:00:00.000+01:00"
+            description: something
+          
+          
+
